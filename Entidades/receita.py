@@ -1,9 +1,9 @@
 from Entidades.ingrediente import Ingrediente
 
 class Receita:
-    def __init__(self, titulo: str, ingredientes: dict, preparo: str):
+    def __init__(self, titulo: str, ingredientes_quantidades: dict, preparo: str):
         self.__titulo = titulo
-        self.__ingredientes = ingredientes
+        self.__ingredientes_quantidades = ingredientes_quantidades
         self.__preparo = preparo
 
     @property
@@ -15,10 +15,8 @@ class Receita:
         self.__titulo = titulo
 
     @property
-    def ingredientes(self):
-        return self.__ingredientes
-
-    #ingredientes setter??
+    def ingredientes_quantidades(self):
+        return self.__ingredientes_quantidades
 
     @property
     def preparo(self):
@@ -27,3 +25,11 @@ class Receita:
     @preparo.setter
     def preparo(self, preparo: str):
         self.__preparo = preparo
+
+    def __eq__(self, other):
+        if isinstance(other, Receita):
+            return self.__titulo == other.titulo
+        return False
+
+    #ingredientes_quantidades setter??
+    #é necessário lista das receitas?
