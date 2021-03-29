@@ -41,7 +41,3 @@ class ControladorReceita:
 
     def retornar_menu_principal(self):
         self.__controlador_sistema.abre_tela()
-
-
-
-

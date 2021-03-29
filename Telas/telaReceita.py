@@ -1,6 +1,3 @@
-from Controladores.controladorIngrediente import ControladorIngrediente
-
-
 class TelaReceita:
     def tela_opcoes(self):
         print("Escolha Opção:\n1. Cadastrar Receitas\n2. Alterar Cadastro de Receita\n3. Listar "
@@ -8,7 +5,7 @@ class TelaReceita:
         opcao = int(input())#tratar exceções
         return opcao
 
-    def obter_dados_receita(self):
+    def obter_dados_receita(self):#metodo precisa ser ajustado - transformar ingredientes em obj classe Ingrediente
         print("INCLUIR RECEITA:")
         titulo = input("Título da receita: ")
 
