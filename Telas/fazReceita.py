@@ -1,0 +1,2 @@
+class FazerReceita:
+    pass

@@ -14,9 +14,9 @@ class ControladorReceita:
             lista_opcoes[self.__tela_receitas.tela_opcoes()]()
 
     def cadastrar_receita(self):
-        dados_receita = self.__tela_receitas.dados_receita()
+        obter_dados_receita = self.__tela_receitas.obter_dados_receita()
 
-        nova_receita = Receita(dados_receita["titulo"], dados_receita["ingredientes_quantidades"], dados_receita["preparo"])
+        nova_receita = Receita(obter_dados_receita["titulo"], obter_dados_receita["ingredientes_quantidades"], obter_dados_receita["preparo"])
 
         if nova_receita in self.__receitas:
             print("Receita já cadastrada")
@@ -29,8 +29,15 @@ class ControladorReceita:
     def listar_receita(self):
         pass
 
-    def excluir_receita(self):
+    def fazer_receita:
         pass
+
+    def excluir_receita(self):
+        titulo_receita_deletada = self.__tela_receitas.excluir_receita()
+        for receita in self.__receitas:
+            if receita.titulo == titulo_receita_deletada:
+                self.__receitas.remove(receita)
+                del receita
 
     def retornar_menu_principal(self):
         self.__controlador_sistema.abre_tela()

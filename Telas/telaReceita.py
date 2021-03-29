@@ -8,7 +8,7 @@ class TelaReceita:
         opcao = int(input())#tratar exceções
         return opcao
 
-    def dados_receita(self):
+    def obter_dados_receita(self):
         print("INCLUIR RECEITA:")
         titulo = input("Título da receita: ")
 
@@ -28,3 +28,17 @@ class TelaReceita:
         preparo = input("Modo de preparo: ")
 
         return {"titulo": titulo, "ingredientes_quantidades": ingredientes_quantidades, "preparo": preparo}
+
+    def alterar_receita(self):
+        pass
+
+    def listar_receitas(self):
+        pass
+
+    def fazer_receita:
+        pass
+
+    def excluir_receita(self):
+        print("EXCLUIR RECEITA:")
+        titulo_excluido = input("Nome da receita a ser excluída: ")
+        return titulo_excluido
