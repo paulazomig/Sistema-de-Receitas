@@ -13,7 +13,6 @@ class Ingrediente:
 
     @property
     def unidade_medida(self):
-
         return self.__unidade_medida
 
     @unidade_medida.setter

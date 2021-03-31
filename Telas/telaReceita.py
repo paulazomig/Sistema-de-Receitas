@@ -21,7 +21,7 @@ class TelaReceita:
             mais_ingredientes = input("Deseja adicionar mais um ingrediente? ")
             if mais_ingredientes == "Não":
                 continua = False
-
+        print(ingredientes_quantidades)
         preparo = input("Modo de preparo: ")
 
         return {"titulo": titulo, "ingredientes_quantidades": ingredientes_quantidades, "preparo": preparo}
@@ -30,9 +30,6 @@ class TelaReceita:
         pass
 
     def listar_receitas(self):
-        pass
-
-    def fazer_receita:
         pass
 
     def excluir_receita(self):
