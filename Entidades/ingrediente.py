@@ -21,7 +21,5 @@ class Ingrediente:
 
     def __eq__(self, other):
         if isinstance(other, Ingrediente):
-            return (self.__nome == other.nome) and (self.__unidade_medida == other.unidade_medida)
+            return (self.__nome == other.nome)
         return False
-
-    #é necessário lista de ingredientes??

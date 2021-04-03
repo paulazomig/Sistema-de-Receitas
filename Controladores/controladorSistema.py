@@ -28,5 +28,6 @@ class ControladorSistema:
         if opcao_escolhida == 0:
             self.encerrar_sistema()
 
-
-
+    @property
+    def controlador_ingrediente(self):
+        return self.__controlador_ingredientes
