@@ -1,6 +1,6 @@
 class TelaReceita:
     def tela_opcoes(self):
-        print("Escolha Opção:\n1. Cadastrar Receitas\n2. Alterar Cadastro de Receita\n3. Listar "
+        print("Escolha Opção:\n1. Cadastrar Receitas\n2. Alterar Cadastro de Receita\n3. Pesquisar "
               "Receitas\n4. Excluir Receita\n0. Retornar ao Menu Principal")
         opcao = int(input())#tratar exceções
         return opcao
@@ -29,10 +29,20 @@ class TelaReceita:
     def alterar_receita(self):
         print("Qual receita deseja alterar?")
         titulo = input("Titulo: ")
-        return titulo
+        print("Cadastre as informações da receita alterada: ")
+        return {"titulo": titulo}
 
-    def listar_receitas(self):
-        pass
+    def pesquisar_receita(self):
+        print("Qual receita deseja visualizar?")
+        titulo = input("Título: ")
+        return {"titulo": titulo}
+
+    def exibir_receita_pesquisada (self, dados_receita):
+        print(dados_receita["titulo"])
+        print("\nIngredientes:")
+        print(dados_receita["ingredientes"])
+        print("Modo de preparo:")
+        print(dados_receita["preparo"], "\n")
 
     def excluir_receita(self):
         print("EXCLUIR RECEITA:")

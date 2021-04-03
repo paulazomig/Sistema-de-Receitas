@@ -26,10 +26,11 @@ class Receita:
     def preparo(self, preparo: str):
         self.__preparo = preparo
 
+    @ingredientes_quantidades.setter
+    def ingredientes_quantidades(self, ingredientes_quantidades: dict):
+        self.__ingredientes_quantidades = ingredientes_quantidades
+
     def __eq__(self, other):
         if isinstance(other, Receita):
             return self.__titulo == other.titulo
         return False
-
-    #ingredientes_quantidades setter??
-    #é necessário lista das receitas?

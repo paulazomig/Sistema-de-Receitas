@@ -25,3 +25,4 @@ class TelaIngrediente:
 
     def exibir_ingredientes(self, dados_ingrediente):
         print(dados_ingrediente["nome"], " - ", dados_ingrediente["unidade_medida"])
+
