@@ -13,7 +13,11 @@ class ControladorIngrediente:
         lista_opcoes = {1: self.cadastrar_ingrediente, 2: self.alterar_ingrediente, 3: self.listar_ingredientes, 0: self.retornar_menu_principal}
 
         while True:
-            lista_opcoes[self.__tela_ingredientes.tela_opcoes()]()
+            try:
+                lista_opcoes[self.__tela_ingredientes.tela_opcoes()]()
+            except Exception:
+                self.__tela_ingredientes.excecoes_ingrediente()
+                self.abre_tela()
 
     def cadastrar_ingrediente(self) -> Ingrediente:
         dados_ingrediente = self.__tela_ingredientes.dados_ingrediente()
@@ -24,13 +28,11 @@ class ControladorIngrediente:
         self.listagem_ingredientes.append(novo_ingrediente)
 
     def alterar_ingrediente(self):
-        alterar_ingrediente = self.__tela_ingredientes.alterar_ingrediente()
-        for ingrediente in self.listagem_ingredientes:
-            if ingrediente.nome == alterar_ingrediente["nome"]:
-                ingrediente.nome = alterar_ingrediente["novo_nome"]
-                ingrediente.unidade_medida = alterar_ingrediente["nova_unidade_medida"]
-        #raise DadoNaoCadastradoException()
-        self.__tela_ingredientes.tela_opcoes()
+        dados_alteracao_ingrediente = self.__tela_ingredientes.alterar_ingrediente()
+        ingrediente = self.pega_ingrediente(dados_alteracao_ingrediente["nome"])
+        ingrediente.nome = dados_alteracao_ingrediente["novo_nome"]
+        ingrediente.unidade_medida = dados_alteracao_ingrediente["nova_unidade_medida"]
+        #exception
 
     def listar_ingredientes(self):
         for ingrediente in self.listagem_ingredientes:
@@ -38,6 +40,11 @@ class ControladorIngrediente:
 
     def retornar_menu_principal(self):
         self.__controlador_sistema.abre_tela()
+
+    def pega_ingrediente(self, nome: str):
+        for ingrediente in self.listagem_ingredientes:
+            if ingrediente.nome == nome:
+                return ingrediente
 
     @property
     def lista_ingredientes(self):

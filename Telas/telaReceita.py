@@ -21,7 +21,7 @@ class TelaReceita:
             mais_ingredientes = input("Deseja adicionar mais um ingrediente? ")
             if mais_ingredientes == "Não":
                 continua = False
-        print(ingredientes_e_quantidades)
+
         preparo = input("Modo de preparo: ")
 
         return {"titulo": titulo, "ingredientes_e_quantidades": ingredientes_e_quantidades, "preparo": preparo}
@@ -35,7 +35,7 @@ class TelaReceita:
     def pesquisar_receita(self):
         print("Qual receita deseja visualizar?")
         titulo = input("Título: ")
-        return {"titulo": titulo}
+        return titulo
 
     def exibir_receita_pesquisada (self, dados_receita):
         print(dados_receita["titulo"])
