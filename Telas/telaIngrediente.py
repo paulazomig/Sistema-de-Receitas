@@ -13,15 +13,14 @@ class TelaIngrediente:
         return {"nome": nome, "unidade_medida": unidade_medida}
 
     def alterar_ingrediente(self):
-        print("Dados atuais:")
+        print("Qual ingrediente deseja alterar?")
         nome = input("Nome: ")
-        unidade_medida = input("Unidade de medida: ")
 
         print("Novos dados:")
         novo_nome = input("Nome: ")
         nova_unidade_medida = input("Unidade de medida: ")
 
-        return {"nome": nome, "unidade_medida": unidade_medida, "novo_nome": novo_nome, "nova_unidade_medida": nova_unidade_medida}
+        return {"nome": nome, "novo_nome": novo_nome, "nova_unidade_medida": nova_unidade_medida}
 
     def exibir_ingredientes(self, dados_ingrediente):
         print(dados_ingrediente["nome"], " - ", dados_ingrediente["unidade_medida"])

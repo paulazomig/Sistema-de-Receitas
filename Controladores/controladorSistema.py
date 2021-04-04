@@ -1,7 +1,6 @@
 from Controladores.controladorIngrediente import ControladorIngrediente
 from Telas.telaSistema import TelaSistema
 from Controladores.controladorReceita import ControladorReceita
-from Telas.telaReceita import TelaReceita
 
 
 class ControladorSistema:

@@ -20,23 +20,21 @@ class ControladorReceita:
         dados_receita = self.__tela_receitas.obter_dados_receita()
 
         ingredientes_receita = {}
-        print(self.__controlador_ingrediente.listaaa_ingredientes)
 
         for nome_ingrediente in dados_receita["ingredientes_e_quantidades"]:
 
-            for i in self.__controlador_ingrediente.listaaa_ingredientes:
+            for i in self.__controlador_ingrediente.listagem_ingredientes:
                 add_ingrediente = None
                 if i.nome == nome_ingrediente:
                     add_ingrediente = i
                     ingredientes_receita[add_ingrediente.nome] = dados_receita["ingredientes_e_quantidades"][nome_ingrediente]
-        print(ingredientes_receita)
+
         nova_receita = Receita(dados_receita["titulo"], ingredientes_receita, dados_receita["preparo"])
 
         if nova_receita in self.__lista_receitas:
             print("Receita já cadastrada")
             return
         self.__lista_receitas.append(nova_receita)
-        print(self.__lista_receitas) #DELETAR O PRINT DPS
 
     def alterar_receita(self):
         alterar_receita = self.__tela_receitas.alterar_receita()
@@ -49,16 +47,14 @@ class ControladorReceita:
                 ingredientes_receita = {}
                 for nome_ingrediente in dados_receita["ingredientes_e_quantidades"]:
 
-                    for i in self.__controlador_ingrediente.listaaa_ingredientes:
+                    for i in self.__controlador_ingrediente.listagem_ingredientes:
                         add_ingrediente = None
                         if i.nome == nome_ingrediente:
                             add_ingrediente = i
                             ingredientes_receita[add_ingrediente.nome] = dados_receita["ingredientes_e_quantidades"][
                                 nome_ingrediente]
 
-                print(ingredientes_receita)
-
-                receita.ingredientes_quantidades = ingredientes_receita
+                receita.ingredientes_receita = ingredientes_receita
                 receita.preparo = dados_receita["preparo"]
 
     def pesquisar_receita(self):
@@ -66,13 +62,13 @@ class ControladorReceita:
         for receita in self.__lista_receitas:
             if receita.titulo == pesquisar_receita["titulo"]:
                 ingredientes = ''
-                for item in receita.ingredientes_quantidades:
+                for item in receita.ingredientes_receita:
                     unidade_medida = ''
-                    for x in self.__controlador_ingrediente.listaaa_ingredientes:
+                    for x in self.__controlador_ingrediente.listagem_ingredientes:
                         if x.nome == pesquisar_receita["titulo"]:
                             unidade_medida = str(x.unidade_medida)
 
-                    ingredientes += str(item) + ' - ' + str(receita.ingredientes_quantidades[item]) + ' ' + unidade_medida + '\n'
+                    ingredientes += str(item) + ' - ' + str(receita.ingredientes_receita[item]) + ' ' + unidade_medida + '\n'
 
                 self.__tela_receitas.exibir_receita_pesquisada({"titulo": receita.titulo, "ingredientes": ingredientes, "preparo": receita.preparo})
 

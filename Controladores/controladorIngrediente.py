@@ -1,12 +1,13 @@
 from Entidades.ingrediente import Ingrediente
 from Telas.telaIngrediente import TelaIngrediente
+from Excecoes.DadoNaoCadastrado import DadoNaoCadastradoException
 
 
 class ControladorIngrediente:
     def __init__(self, controlador_sistema):
         self.__controlador_sistema = controlador_sistema
         self.__tela_ingredientes = TelaIngrediente()
-        self.listaaa_ingredientes = []
+        self.listagem_ingredientes = []
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastrar_ingrediente, 2: self.alterar_ingrediente, 3: self.listar_ingredientes, 0: self.retornar_menu_principal}
@@ -17,20 +18,22 @@ class ControladorIngrediente:
     def cadastrar_ingrediente(self) -> Ingrediente:
         dados_ingrediente = self.__tela_ingredientes.dados_ingrediente()
         novo_ingrediente = Ingrediente(dados_ingrediente["nome"], dados_ingrediente["unidade_medida"])
-        if novo_ingrediente in self.listaaa_ingredientes:
+        if novo_ingrediente in self.listagem_ingredientes:
             print("Ingrediente já cadastrado")
             return
-        self.listaaa_ingredientes.append(novo_ingrediente)
+        self.listagem_ingredientes.append(novo_ingrediente)
 
     def alterar_ingrediente(self):
         alterar_ingrediente = self.__tela_ingredientes.alterar_ingrediente()
-        for ingrediente in self.listaaa_ingredientes:
+        for ingrediente in self.listagem_ingredientes:
             if ingrediente.nome == alterar_ingrediente["nome"]:
                 ingrediente.nome = alterar_ingrediente["novo_nome"]
                 ingrediente.unidade_medida = alterar_ingrediente["nova_unidade_medida"]
+        #raise DadoNaoCadastradoException()
+        self.__tela_ingredientes.tela_opcoes()
 
     def listar_ingredientes(self):
-        for ingrediente in self.listaaa_ingredientes:
+        for ingrediente in self.listagem_ingredientes:
             self.__tela_ingredientes.exibir_ingredientes({"nome": ingrediente.nome, "unidade_medida": ingrediente.unidade_medida})
 
     def retornar_menu_principal(self):
@@ -38,4 +41,4 @@ class ControladorIngrediente:
 
     @property
     def lista_ingredientes(self):
-        return self.listaaa_ingredientes
+        return self.listagem_ingredientes
