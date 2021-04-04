@@ -16,15 +16,15 @@ class ControladorIngrediente:
             try:
                 lista_opcoes[self.__tela_ingredientes.tela_opcoes()]()
             except Exception:
-                self.__tela_ingredientes.excecoes_ingrediente()
+                self.__tela_ingredientes.erro_menu()
                 self.abre_tela()
 
-    def cadastrar_ingrediente(self) -> Ingrediente:
+    def cadastrar_ingrediente(self):
         dados_ingrediente = self.__tela_ingredientes.dados_ingrediente()
         novo_ingrediente = Ingrediente(dados_ingrediente["nome"], dados_ingrediente["unidade_medida"])
         if novo_ingrediente in self.listagem_ingredientes:
-            print("Ingrediente já cadastrado")
-            return
+            self.__tela_ingredientes.erro_ja_cadastrado()
+            self.abre_tela()
         self.listagem_ingredientes.append(novo_ingrediente)
 
     def alterar_ingrediente(self):
@@ -37,15 +37,21 @@ class ControladorIngrediente:
     def listar_ingredientes(self):
         for ingrediente in self.listagem_ingredientes:
             self.__tela_ingredientes.exibir_ingredientes({"nome": ingrediente.nome, "unidade_medida": ingrediente.unidade_medida})
-
-    def retornar_menu_principal(self):
-        self.__controlador_sistema.abre_tela()
+        #exception
 
     def pega_ingrediente(self, nome: str):
-        for ingrediente in self.listagem_ingredientes:
-            if ingrediente.nome == nome:
-                return ingrediente
+        try:
+            for ingrediente in self.listagem_ingredientes:
+                if ingrediente.nome == nome:
+                    return ingrediente
+            raise ValueError
+        except ValueError:
+            self.__tela_ingredientes.erro_nao_cadastrado(nome)
+            self.abre_tela()
 
     @property
     def lista_ingredientes(self):
         return self.listagem_ingredientes
+
+    def retornar_menu_principal(self):
+        self.__controlador_sistema.abre_tela()

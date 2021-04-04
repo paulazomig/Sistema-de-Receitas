@@ -1,4 +1,7 @@
-class TelaIngrediente:
+from Telas.abstractTelaExcecoes import AbstractTelaExcecoes
+
+
+class TelaIngrediente(AbstractTelaExcecoes):
     def tela_opcoes(self):
         print("Escolha Opção:\n1. Cadastrar Ingredientes\n2. Alterar Cadastro de Ingrediente\n3. Listar "
               "Ingredientes\n0. Retornar ao Menu Principal")
@@ -31,7 +34,10 @@ class TelaIngrediente:
         print("LISTA DE INGREDIENTES:")
         print(dados_ingrediente["nome"], " - ", dados_ingrediente["unidade_medida"])
 
-    def excecoes_ingrediente(self, tipo_excecao):
+    def erro_ja_cadastrado(self):
+        print("Não é possível completar a operação - o ingrediente que você está tentando cadastrar já existe.")
+        return
 
-        print("O valor inserido não é válido. Por favor digitar um número de 0 a 3.")
+    def erro_nao_cadastrado(self, nome):
+        print("O ingrediente {nome} não foi encontrado. Por favor cadastrar o ingrediente.")
         return

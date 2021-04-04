@@ -1,4 +1,7 @@
-class TelaReceita:
+from Telas.abstractTelaExcecoes import AbstractTelaExcecoes
+
+
+class TelaReceita(AbstractTelaExcecoes):
     def tela_opcoes(self):
         print("Escolha Opção:\n1. Cadastrar Receitas\n2. Alterar Cadastro de Receita\n3. Pesquisar "
               "Receitas\n4. Excluir Receita\n0. Retornar ao Menu Principal")
@@ -30,7 +33,7 @@ class TelaReceita:
         print("Qual receita deseja alterar?")
         titulo = input("Titulo: ")
         print("Cadastre as informações da receita alterada: ")
-        return {"titulo": titulo}
+        return titulo
 
     def pesquisar_receita(self):
         print("Qual receita deseja visualizar?")
@@ -48,3 +51,12 @@ class TelaReceita:
         print("EXCLUIR RECEITA:")
         titulo_excluido = input("Nome da receita a ser excluída: ")
         return titulo_excluido
+
+    def erro_menu(self):
+        return super().erro_menu()
+
+    def erro_ja_cadastrado(self):
+        pass
+
+    def erro_nao_cadastrado(self):
+        pass

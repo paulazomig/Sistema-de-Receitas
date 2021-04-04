@@ -1,5 +1,5 @@
 from Entidades.receita import Receita
-from Controladores.controladorIngrediente import ControladorIngrediente
+#from Controladores.controladorIngrediente import ControladorIngrediente
 from Telas.telaReceita import TelaReceita
 
 
@@ -14,7 +14,11 @@ class ControladorReceita:
         lista_opcoes = {1: self.cadastrar_receita, 2: self.alterar_receita, 3: self.pesquisar_receita, 4: self.excluir_receita,
                         0: self.retornar_menu_principal}
         while True:
-            lista_opcoes[self.__tela_receitas.tela_opcoes()]()
+            try:
+                lista_opcoes[self.__tela_receitas.tela_opcoes()]()
+            except Exception:
+                self.__tela_receitas.erro_menu()
+                self.abre_tela()
 
     def cadastrar_receita(self):
         dados_receita = self.__tela_receitas.obter_dados_receita()
@@ -26,16 +30,15 @@ class ControladorReceita:
             print("Receita já cadastrada")
             return
         self.__lista_receitas.append(nova_receita)
+        #exception
 
     def alterar_receita(self):
-        alterar_receita = self.__tela_receitas.alterar_receita()
-
-        for receita in self.__lista_receitas:
-            if receita.titulo == alterar_receita["titulo"]:
-                dados_receita = self.__tela_receitas.obter_dados_receita()
-                receita.titulo = dados_receita["titulo"]
-                receita.ingredientes_receita = self.criar_lista_ingredientes(dados_receita["ingredientes_e_quantidades"])
-                receita.preparo = dados_receita["preparo"]
+        titulo_receita_alterada = self.__tela_receitas.alterar_receita()
+        receita_alterada = self.pega_receita(titulo_receita_alterada)
+        dados_receita = self.__tela_receitas.obter_dados_receita()
+        receita_alterada.titulo = dados_receita["titulo"]
+        receita_alterada.ingredientes_receita = self.criar_lista_ingredientes(dados_receita["ingredientes_e_quantidades"])
+        receita_alterada.preparo = dados_receita["preparo"]
 
     def pesquisar_receita(self):
         titulo_receita_pesquisada = self.__tela_receitas.pesquisar_receita()
@@ -49,11 +52,10 @@ class ControladorReceita:
 
     def excluir_receita(self):
         titulo_receita_deletada = self.__tela_receitas.excluir_receita()
-        for receita in self.__lista_receitas:
-            if receita.titulo == titulo_receita_deletada:
-                self.__lista_receitas.remove(receita)
-                del receita
-                print(self.__lista_receitas) #DELETAR O PRINT DPS
+        receita_deletada = self.pega_receita(titulo_receita_deletada)
+        self.__lista_receitas.remove(receita_deletada)
+        del receita_deletada
+        #exception
 
     def criar_lista_ingredientes(self, dados_ingredientes: dict):
         ingredientes_receita = {}
