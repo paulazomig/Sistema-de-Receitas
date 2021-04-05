@@ -30,7 +30,6 @@ class ControladorReceita:
             self.__tela_receitas.erro_ja_cadastrado(nova_receita.titulo)
             self.abre_tela()
         self.__lista_receitas.append(nova_receita)
-        print(self.__lista_receitas)
         self.__tela_receitas.feedback_sucesso()
 
         self.registra_evento("Cadastro de receita", nova_receita.titulo)
