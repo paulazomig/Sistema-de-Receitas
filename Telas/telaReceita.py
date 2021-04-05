@@ -4,7 +4,7 @@ from Telas.abstractTelaExcecoes import AbstractTelaExcecoes
 class TelaReceita(AbstractTelaExcecoes):
     def tela_opcoes(self):
         print("Escolha Opção:\n1. Cadastrar Receitas\n2. Alterar Cadastro de Receita\n3. Pesquisar "
-              "Receitas\n4. Excluir Receita\n5. Fazer Receita\n0. Retornar ao Menu Principal")
+              "Receitas\n4. Excluir Receita\n5. Fazer Receita\n6. Visualizar Relatório\n0. Retornar ao Menu Principal")
         opcao = int(input())#tratar exceções
         return opcao
 
@@ -62,9 +62,18 @@ class TelaReceita(AbstractTelaExcecoes):
         titulo_fazer = input("Título: ")
         return titulo_fazer
 
+    def visualizar_relatorio(self, eventos: list):
+        print("AÇÃO - RECEITA - DATA")
+        for evento_listado in eventos:
+            print("{} - {} - {}".format(evento_listado['acao'], evento_listado['receita'], evento_listado['data']))
+
     def erro_ja_cadastrado(self, nome):
         print("Não é possível completar a operação -  a receita {} já foi cadastrada.\n".format(nome))
 
     def erro_nao_cadastrado(self, nome):
         print("A receita {} não foi encontrada. Por favor cadastrar a receita.\n".format(nome))
+        return
+
+    def erro_ingredientes_insuficientes(self, nome):
+        print("O ingrediente {} não possui quantidade suficiente para essa receita!\n".format(nome))
         return
