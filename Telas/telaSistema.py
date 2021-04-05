@@ -3,7 +3,7 @@ from Telas.abstractTelaExcecoes import AbstractTelaExcecoes
 
 class TelaSistema(AbstractTelaExcecoes):
     def opcoes(self):
-        print("Escolha Opção:\n1. Ingredientes\n2. Receitas\n0. Finaliza Sistema")
+        print("Escolha Opção:\n1. Ingredientes\n2. Receitas\n0. Finalizar Sistema")
         opcao = int(input())
         return opcao
 

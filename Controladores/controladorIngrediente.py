@@ -23,8 +23,9 @@ class ControladorIngrediente:
         novo_ingrediente = Ingrediente(dados_ingrediente["nome"], dados_ingrediente["unidade_medida"], dados_ingrediente["quantidade"])
         if novo_ingrediente in self.listagem_ingredientes:
             self.__tela_ingredientes.erro_ja_cadastrado(novo_ingrediente.nome)
-            self.abre_tela()
+            return
         self.listagem_ingredientes.append(novo_ingrediente)
+        self.__tela_ingredientes.feedback_sucesso()
 
     def alterar_ingrediente(self):
         dados_alteracao_ingrediente = self.__tela_ingredientes.alterar_ingrediente()
@@ -32,6 +33,7 @@ class ControladorIngrediente:
         ingrediente.nome = dados_alteracao_ingrediente["novo_nome"]
         ingrediente.unidade_medida = dados_alteracao_ingrediente["nova_unidade_medida"]
         ingrediente.quantidade = dados_alteracao_ingrediente["nova_quantidade"]
+        self.__tela_ingredientes.feedback_sucesso()
 
     def listar_ingredientes(self):
         if not self.listagem_ingredientes:
@@ -40,10 +42,12 @@ class ControladorIngrediente:
             for ingrediente in self.listagem_ingredientes:
                 self.__tela_ingredientes.exibir_ingredientes({"nome": ingrediente.nome, "unidade_medida": ingrediente.unidade_medida, "quantidade": ingrediente.quantidade})
 
+    # ------ MÉTODOS INTERNOS ------
+
     def pega_ingrediente(self, nome: str):
         try:
             for ingrediente in self.listagem_ingredientes:
-                if ingrediente.nome == nome:
+                if ingrediente.nome.lower() == nome.lower():
                     return ingrediente
             raise ValueError
         except ValueError:

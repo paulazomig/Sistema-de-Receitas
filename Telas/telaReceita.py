@@ -4,8 +4,8 @@ from Telas.abstractTelaExcecoes import AbstractTelaExcecoes
 class TelaReceita(AbstractTelaExcecoes):
     def tela_opcoes(self):
         print("Escolha Opção:\n1. Cadastrar Receitas\n2. Alterar Cadastro de Receita\n3. Pesquisar "
-              "Receitas\n4. Excluir Receita\n5. Fazer Receita\n6. Visualizar Relatório\n0. Retornar ao Menu Principal")
-        opcao = int(input())#tratar exceções
+              "Receita\n4. Fazer Receita\n5. Visualizar Relatório de Receitas\n6. Excluir Receita\n0. Retornar ao Menu Principal")
+        opcao = int(input())
         return opcao
 
     def obter_dados_receita(self):
@@ -46,7 +46,7 @@ class TelaReceita(AbstractTelaExcecoes):
         return titulo
 
     def exibir_receita_pesquisada (self, dados_receita):
-        print(dados_receita["titulo"])
+        print(dados_receita["titulo"].upper())
         print("\nIngredientes:")
         print(dados_receita["ingredientes"])
         print("Modo de preparo:")
@@ -63,9 +63,12 @@ class TelaReceita(AbstractTelaExcecoes):
         return titulo_fazer
 
     def visualizar_relatorio(self, eventos: list):
-        print("AÇÃO - RECEITA - DATA")
+        print("AÇÃO - RECEITA - DATA\n")
         for evento_listado in eventos:
             print("{} - {} - {}".format(evento_listado['acao'], evento_listado['receita'], evento_listado['data']))
+        print("\n")
+
+    # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
 
     def erro_ja_cadastrado(self, nome):
         print("Não é possível completar a operação -  a receita {} já foi cadastrada.\n".format(nome))

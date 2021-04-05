@@ -26,9 +26,6 @@ class ControladorSistema:
                 if opcao_escolhida == 2:
                     self.__controlador_receitas.abre_tela()
 
-                if opcao_escolhida == 3:
-                    self.__controlador_relatorio.abre_tela()
-
                 if opcao_escolhida == 0:
                     self.encerrar_sistema()
                 else:
