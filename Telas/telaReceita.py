@@ -17,16 +17,21 @@ class TelaReceita(AbstractTelaExcecoes):
         ingredientes_e_quantidades = {}
         while continua:
             nome_ingrediente = input("Nome do ingrediente: ")
-            quantidade_ingrediente = int(input("Quantidade do ingrediente: "))
-
+            try:
+                quantidade_ingrediente = int(input("Quantidade do ingrediente: "))
+            except ValueError:
+                self.erro_valor()
             ingredientes_e_quantidades[nome_ingrediente] = quantidade_ingrediente
 
-            mais_ingredientes = input("Deseja adicionar mais um ingrediente? ")
-            if mais_ingredientes == "Não":
+            mais_ingredientes = input("Deseja adicionar mais um ingrediente? (SIM ou NÃO)\n")
+            if mais_ingredientes.lower() == "não" or mais_ingredientes.lower() == "nao":
                 continua = False
+            elif mais_ingredientes.lower() == "sim":
+                continue
+            else:
+                self.erro_menu()
 
         preparo = input("Modo de preparo: ")
-
         return {"titulo": titulo, "ingredientes_e_quantidades": ingredientes_e_quantidades, "preparo": preparo}
 
     def alterar_receita(self):
@@ -52,11 +57,9 @@ class TelaReceita(AbstractTelaExcecoes):
         titulo_excluido = input("Nome da receita a ser excluída: ")
         return titulo_excluido
 
-    def erro_menu(self):
-        return super().erro_menu()
+    def erro_ja_cadastrado(self, nome):
+        print("Não é possível completar a operação -  a receita {} já foi cadastrada.\n".format(nome))
 
-    def erro_ja_cadastrado(self):
-        pass
-
-    def erro_nao_cadastrado(self):
-        pass
+    def erro_nao_cadastrado(self, nome):
+        print("A receita {} não foi encontrada. Por favor cadastrar a receita.\n".format(nome))
+        return

@@ -1,6 +1,5 @@
 from Entidades.ingrediente import Ingrediente
 from Telas.telaIngrediente import TelaIngrediente
-from Excecoes.DadoNaoCadastrado import DadoNaoCadastradoException
 
 
 class ControladorIngrediente:
@@ -21,9 +20,9 @@ class ControladorIngrediente:
 
     def cadastrar_ingrediente(self):
         dados_ingrediente = self.__tela_ingredientes.dados_ingrediente()
-        novo_ingrediente = Ingrediente(dados_ingrediente["nome"], dados_ingrediente["unidade_medida"])
+        novo_ingrediente = Ingrediente(dados_ingrediente["nome"], dados_ingrediente["unidade_medida"], dados_ingrediente["quantidade"])
         if novo_ingrediente in self.listagem_ingredientes:
-            self.__tela_ingredientes.erro_ja_cadastrado()
+            self.__tela_ingredientes.erro_ja_cadastrado(novo_ingrediente.nome)
             self.abre_tela()
         self.listagem_ingredientes.append(novo_ingrediente)
 
@@ -32,12 +31,14 @@ class ControladorIngrediente:
         ingrediente = self.pega_ingrediente(dados_alteracao_ingrediente["nome"])
         ingrediente.nome = dados_alteracao_ingrediente["novo_nome"]
         ingrediente.unidade_medida = dados_alteracao_ingrediente["nova_unidade_medida"]
-        #exception
+        ingrediente.quantidade = dados_alteracao_ingrediente["nova_quantidade"]
 
     def listar_ingredientes(self):
-        for ingrediente in self.listagem_ingredientes:
-            self.__tela_ingredientes.exibir_ingredientes({"nome": ingrediente.nome, "unidade_medida": ingrediente.unidade_medida})
-        #exception
+        if not self.listagem_ingredientes:
+            self.__tela_ingredientes.erro_lista_vazia()
+        else:
+            for ingrediente in self.listagem_ingredientes:
+                self.__tela_ingredientes.exibir_ingredientes({"nome": ingrediente.nome, "unidade_medida": ingrediente.unidade_medida, "quantidade": ingrediente.quantidade})
 
     def pega_ingrediente(self, nome: str):
         try:

@@ -12,13 +12,17 @@ class TelaIngrediente(AbstractTelaExcecoes):
         print("INCLUIR INGREDIENTE:")
         nome = input("Nome: ")
         unidade_medida = input("Unidade de medida: ")
+        try:
+           quantidade = int(input("Quantidade em estoque: "))
+        except ValueError:
+            self.erro_valor()
+
         while True:
             if nome != '' and unidade_medida != '':
-                return {"nome": nome, "unidade_medida": unidade_medida}
+                return {"nome": nome, "unidade_medida": unidade_medida, "quantidade": quantidade}
             else:
-                print("Os valores inseridos não devem ser nulos. Por favor, digite um nome e unidade de medida.")
-                nome = input("Nome: ")
-                unidade_medida = input("Unidade de medida: ")
+                print("Erro nos valores inseridos! Os valores de nome e unidade de medida não devem ser vazios.")
+                self.tela_opcoes()
 
     def alterar_ingrediente(self):
         print("Qual ingrediente deseja alterar?")
@@ -27,17 +31,18 @@ class TelaIngrediente(AbstractTelaExcecoes):
         print("Novos dados:")
         novo_nome = input("Nome: ")
         nova_unidade_medida = input("Unidade de medida: ")
+        nova_quantidade = int(input("Quantidade em estoque: "))
 
-        return {"nome": nome, "novo_nome": novo_nome, "nova_unidade_medida": nova_unidade_medida}
+        return {"nome": nome, "novo_nome": novo_nome, "nova_unidade_medida": nova_unidade_medida, "nova_quantidade": nova_quantidade}
 
     def exibir_ingredientes(self, dados_ingrediente):
         print("LISTA DE INGREDIENTES:")
-        print(dados_ingrediente["nome"], " - ", dados_ingrediente["unidade_medida"])
+        print(dados_ingrediente["nome"], " - ", dados_ingrediente["quantidade"], ' ', dados_ingrediente["unidade_medida"])
 
-    def erro_ja_cadastrado(self):
-        print("Não é possível completar a operação - o ingrediente que você está tentando cadastrar já existe.")
+    def erro_ja_cadastrado(self, nome):
+        print("Não é possível completar a operação -  o ingrediente {} já foi cadastrado.\n".format(nome))
         return
 
     def erro_nao_cadastrado(self, nome):
-        print("O ingrediente {nome} não foi encontrado. Por favor cadastrar o ingrediente.")
+        print("O ingrediente {} não foi encontrado. Por favor cadastrar o ingrediente.\n".format(nome))
         return
