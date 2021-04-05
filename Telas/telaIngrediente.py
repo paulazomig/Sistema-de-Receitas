@@ -18,7 +18,7 @@ class TelaIngrediente(AbstractTelaExcecoes):
             self.erro_valor()
 
         while True:
-            if nome != '' and unidade_medida != '':
+            if nome != '' and unidade_medida != '' and quantidade >= 0: #coloquei coisa aqui se der pau checar
                 return {"nome": nome, "unidade_medida": unidade_medida, "quantidade": quantidade}
             else:
                 print("Erro nos valores inseridos! Os valores de nome e unidade de medida não devem ser vazios.")

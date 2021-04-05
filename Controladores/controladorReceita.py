@@ -1,17 +1,18 @@
 from Entidades.receita import Receita
-#from Controladores.controladorIngrediente import ControladorIngrediente
 from Telas.telaReceita import TelaReceita
+from Controladores.fazerReceita import FazerReceita
 
 
 class ControladorReceita:
     def __init__(self, controlador_sistema):
         self.__controlador_sistema = controlador_sistema
         self.__controlador_ingrediente = self.__controlador_sistema.controlador_ingrediente
+        self.__fazer_receita = FazerReceita()
         self.__tela_receitas = TelaReceita()
         self.__lista_receitas = []
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastrar_receita, 2: self.alterar_receita, 3: self.pesquisar_receita, 4: self.excluir_receita,
+        lista_opcoes = {1: self.cadastrar_receita, 2: self.alterar_receita, 3: self.pesquisar_receita, 4: self.excluir_receita, 5: self.fazer_receita,
                         0: self.retornar_menu_principal}
         while True:
             try:
@@ -61,6 +62,18 @@ class ControladorReceita:
             add_ingrediente = self.__controlador_ingrediente.pega_ingrediente(nome_ingrediente)
             ingredientes_receita[add_ingrediente.nome] = dados_ingredientes[nome_ingrediente]
         return ingredientes_receita
+
+    def fazer_receita(self):
+        titulo_fazer_receita = self.__tela_receitas.fazer_receita()
+        receita = self.pega_receita(titulo_fazer_receita)
+        #self.__fazer_receita.fazer_receita(receita)
+        '''for checagem_quantidades in receita.ingredientes_receita:
+            ingrediente_check = self.__controlador_ingrediente.pega_ingrediente(checagem_quantidades)
+            if ingrediente_check.quantidade < receita.ingredientes_receita[checagem_quantidades]:
+                pass
+        for ingredientes_utilizados in receita.ingredientes_receita:
+            ingrediente_deduzir = self.__controlador_ingrediente.pega_ingrediente(ingredientes_utilizados)
+            ingrediente_deduzir.quantidade -= receita.ingredientes_receita[ingredientes_utilizados]'''
 
     def pega_receita(self, nome: str):
         try:
