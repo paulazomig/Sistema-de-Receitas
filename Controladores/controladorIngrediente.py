@@ -9,7 +9,7 @@ class ControladorIngrediente:
         self.listagem_ingredientes = []
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastrar_ingrediente, 2: self.alterar_ingrediente, 3: self.listar_ingredientes, 0: self.retornar_menu_principal}
+        lista_opcoes = {1: self.cadastrar_ingrediente, 2: self.alterar_ingrediente, 3: self.listar_ingredientes, 4: self.excluir_ingrediente, 0: self.retornar_menu_principal}
 
         while True:
             try:
@@ -41,6 +41,13 @@ class ControladorIngrediente:
         else:
             for ingrediente in self.listagem_ingredientes:
                 self.__tela_ingredientes.exibir_ingredientes({"nome": ingrediente.nome, "unidade_medida": ingrediente.unidade_medida, "quantidade": ingrediente.quantidade})
+
+    def excluir_ingrediente(self):
+        nome_ingrediente_deletado = self.__tela_ingredientes.excluir_ingrediente()
+        ingrediente_deletado = self.pega_ingrediente(nome_ingrediente_deletado)
+        self.listagem_ingredientes.remove(ingrediente_deletado)
+        del ingrediente_deletado
+        self.__tela_ingredientes.feedback_sucesso()
 
     # ------ MÉTODOS INTERNOS ------
 

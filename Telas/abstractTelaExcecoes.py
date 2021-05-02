@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class AbstractTelaExcecoes(ABC):
+class AbstractTela(ABC):
     def feedback_sucesso(self):
         print("Ação realizada com sucesso.\n")
         return

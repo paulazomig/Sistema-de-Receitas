@@ -1,5 +1,6 @@
 from Entidades.receita import Receita
 from Telas.telaReceita import TelaReceita
+from Entidades.ingredienteReceita import IngredienteReceita
 from datetime import date
 
 
@@ -12,7 +13,8 @@ class ControladorReceita:
         self.__eventos_receita = []
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastrar_receita, 2: self.alterar_receita, 3: self.pesquisar_receita, 4: self.fazer_receita, 5: self.ver_relatorio_receita, 6: self.excluir_receita, 0: self.retornar_menu_principal}
+        lista_opcoes = {1: self.cadastrar_receita, 2: self.alterar_receita, 3: self.pesquisar_receita, 4: self.fazer_receita,
+                        5: self.listar_receitas, 6: self.ver_relatorio_receita, 7: self.excluir_receita, 0: self.retornar_menu_principal}
         while True:
             try:
                 lista_opcoes[self.__tela_receitas.tela_opcoes()]()
@@ -49,9 +51,8 @@ class ControladorReceita:
         titulo_receita_pesquisada = self.__tela_receitas.pesquisar_receita()
         receita = self.pega_receita(titulo_receita_pesquisada)
         ingredientes = ''
-        for nome_ingrediente in receita.ingredientes_receita:
-            ingrediente = self.__controlador_ingrediente.pega_ingrediente(nome_ingrediente)
-            ingredientes += str(ingrediente.nome) + ' - ' + str(receita.ingredientes_receita[nome_ingrediente]) + ' ' + ingrediente.unidade_medida + '\n'
+        for i in receita.ingredientes_receita:
+            ingredientes += str(i.nome) + ' - ' + str(i.quantidade) + ' ' + str(i.unidade_medida) + '\n'
 
         self.__tela_receitas.exibir_receita_pesquisada({"titulo": receita.titulo, "ingredientes": ingredientes, "preparo": receita.preparo})
 
@@ -61,17 +62,28 @@ class ControladorReceita:
         titulo_receita_feita = self.__tela_receitas.fazer_receita()
         receita = self.pega_receita(titulo_receita_feita)
 
-        for checagem_quantidades in receita.ingredientes_receita:
-            ingrediente_check = self.__controlador_ingrediente.pega_ingrediente(checagem_quantidades)
-            if ingrediente_check.quantidade < receita.ingredientes_receita[checagem_quantidades]:
-                self.__tela_receitas.erro_ingredientes_insuficientes(ingrediente_check.nome)
+        for i in receita.ingredientes_receita:
+            ingrediente_estoque = self.__controlador_ingrediente.pega_ingrediente(i.nome)
+            if ingrediente_estoque.quantidade < i.quantidade:
+                self.__tela_receitas.erro_ingredientes_insuficientes(ingrediente_estoque.nome)
                 self.abre_tela()
         for ingredientes_utilizados in receita.ingredientes_receita:
-            ingrediente_deduzir = self.__controlador_ingrediente.pega_ingrediente(ingredientes_utilizados)
-            ingrediente_deduzir.quantidade -= receita.ingredientes_receita[ingredientes_utilizados]
+            ingrediente_deduzir = self.__controlador_ingrediente.pega_ingrediente(ingredientes_utilizados.nome)
+            ingrediente_deduzir.quantidade -= ingredientes_utilizados.quantidade
         self.__tela_receitas.feedback_sucesso()
 
         self.registra_evento("Receita feita", titulo_receita_feita)
+
+    def listar_receitas(self):
+        if not self.__lista_receitas:
+            self.__tela_receitas.erro_lista_vazia()
+        else:
+            lista_receitas = ''
+            for receita in self.__lista_receitas:
+                lista_receitas += str(receita.titulo.upper()) + '\n'
+            self.__tela_receitas.exibir_lista_receitas(lista_receitas)
+
+        self.registra_evento("Exibição de listagem de receitas", "Todas as receitas registradas")
 
     def ver_relatorio_receita(self):
         if not self.__eventos_receita:
@@ -105,10 +117,10 @@ class ControladorReceita:
         self.__eventos_receita.append(registro)
 
     def criar_lista_ingredientes(self, dados_ingredientes: dict):
-        ingredientes_receita = {}
+        ingredientes_receita = []
         for nome_ingrediente in dados_ingredientes:
-            add_ingrediente = self.__controlador_ingrediente.pega_ingrediente(nome_ingrediente)
-            ingredientes_receita[add_ingrediente.nome] = dados_ingredientes[nome_ingrediente]
+            add_ingrediente = IngredienteReceita(self.__controlador_ingrediente.pega_ingrediente(nome_ingrediente), dados_ingredientes[nome_ingrediente])
+            ingredientes_receita.append(add_ingrediente)
         return ingredientes_receita
 
     def retornar_menu_principal(self):

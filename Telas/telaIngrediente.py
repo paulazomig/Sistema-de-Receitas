@@ -1,10 +1,10 @@
-from Telas.abstractTelaExcecoes import AbstractTelaExcecoes
+from Telas.abstractTelaExcecoes import AbstractTela
 
 
-class TelaIngrediente(AbstractTelaExcecoes):
+class TelaIngrediente(AbstractTela):
     def tela_opcoes(self):
         print("Escolha Opção:\n1. Cadastrar Ingredientes\n2. Alterar Cadastro de Ingrediente\n3. Listar "
-              "Ingredientes\n0. Retornar ao Menu Principal")
+              "Ingredientes\n4. Excluir Ingrediente\n0. Retornar ao Menu Principal")
         opcao = int(input())
         return opcao
 
@@ -40,6 +40,11 @@ class TelaIngrediente(AbstractTelaExcecoes):
     def exibir_ingredientes(self, dados_ingrediente):
         print(dados_ingrediente["nome"].upper(), " - ", dados_ingrediente["quantidade"], ' ',
               dados_ingrediente["unidade_medida"])
+
+    def excluir_ingrediente(self):
+        print("Qual ingrediente deseja excluir?")
+        nome = input("Nome: ")
+        return nome
 
     # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
 

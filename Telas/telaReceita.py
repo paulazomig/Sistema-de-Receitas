@@ -1,10 +1,10 @@
-from Telas.abstractTelaExcecoes import AbstractTelaExcecoes
+from Telas.abstractTelaExcecoes import AbstractTela
 
 
-class TelaReceita(AbstractTelaExcecoes):
+class TelaReceita(AbstractTela):
     def tela_opcoes(self):
         print("Escolha Opção:\n1. Cadastrar Receitas\n2. Alterar Cadastro de Receita\n3. Pesquisar "
-              "Receita\n4. Fazer Receita\n5. Visualizar Relatório de Receitas\n6. Excluir Receita\n0. Retornar ao Menu Principal")
+              "Receita\n4. Fazer Receita\n5. Listar Receitas\n6. Visualizar Relatório de Receitas\n7. Excluir Receita\n0. Retornar ao Menu Principal")
         opcao = int(input())
         return opcao
 
@@ -51,6 +51,9 @@ class TelaReceita(AbstractTelaExcecoes):
         print(dados_receita["ingredientes"])
         print("Modo de preparo:")
         print(dados_receita["preparo"], "\n")
+
+    def exibir_lista_receitas(self, lista_receitas):
+        print(lista_receitas)
 
     def excluir_receita(self):
         print("EXCLUIR RECEITA:")
