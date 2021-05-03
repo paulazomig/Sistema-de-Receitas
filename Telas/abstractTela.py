@@ -1,22 +1,22 @@
 from abc import ABC, abstractmethod
+import PySimpleGUI as sg
 
 
 class AbstractTela(ABC):
     def feedback_sucesso(self):
-        print("Ação realizada com sucesso.\n")
-        return
+        sg.Popup("Sucesso", "Ação realizada com sucesso.")
 
     def erro_menu(self):
-        print("ATENÇÃO\nO valor inserido não é válido. Por favor digite um valor indicado no menu.\n")
-        return
+        sg.Popup("ATENÇÃO", "O valor inserido não é válido. Por favor digite um valor indicado no menu.")
 
     def erro_lista_vazia(self):
-        print("Lista vazia - Não há nenhum registro.\n")
-        return
+        sg.Popup("Lista Vazia", "Não há nenhum registro deste item.")
 
     def erro_valor(self):
-        print("O valor inserido deve ser inteiro.\n")
-        return
+        sg.Popup("Erro de Valor", "O valor inserido deve ser um número.")
+
+    def erro_branco(self):
+        sg.Popup("Espaço em Branco", "Por favor preencher todos os campos")
 
     @abstractmethod
     def erro_nao_cadastrado(self, nome):

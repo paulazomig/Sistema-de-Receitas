@@ -3,9 +3,9 @@ import PySimpleGUI as sg
 
 
 class TelaIngredienteEstoque(AbstractTela):
-    def init_components(self, lista_ingredientes):
-        sg.ChangeLookAndFeel('LightGreen')
+    sg.ChangeLookAndFeel('LightGreen')
 
+    def init_components(self, lista_ingredientes):
         layout = [[sg.Text(lista_ingredientes)],
                   [sg.Button('Retornar ao Menu de Ingredientes')]]
 

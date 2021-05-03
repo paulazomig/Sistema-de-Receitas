@@ -27,7 +27,7 @@ class ControladorIngrediente:
                         lista.append(ingrediente.nome)
                 opcao, valor = self.__tela_ingredientes.init_components(lista)
 
-                if opcao == 'Alterar Ingrediente':
+                if opcao == 'Alterar Ingrediente' or opcao == 'Excluir Ingrediente':
                     lista_opcoes[opcao](valor['cb_opcoes'])
                 else:
                     lista_opcoes[opcao]()
@@ -46,25 +46,24 @@ class ControladorIngrediente:
         dados_ingrediente = self.__tela_ingredientes_acoes.init_components_cadastro()
         novo_ingrediente = Ingrediente(dados_ingrediente["nome"], dados_ingrediente["unidade_medida"], dados_ingrediente["quantidade"])
         if novo_ingrediente in self.listagem_ingredientes:
-            self.__tela_ingredientes.erro_ja_cadastrado(novo_ingrediente.nome)
+            self.__tela_ingredientes_acoes.erro_ja_cadastrado(novo_ingrediente.nome)
             return
         self.listagem_ingredientes.append(novo_ingrediente)
         self.__tela_ingredientes.feedback_sucesso()
 
-    def alterar_ingrediente(self):
-        dados_alteracao_ingrediente = self.__tela_ingredientes.alterar_ingrediente()
-        ingrediente = self.pega_ingrediente(dados_alteracao_ingrediente["nome"])
-        ingrediente.nome = dados_alteracao_ingrediente["novo_nome"]
+    def alterar_ingrediente(self, nome):
+        ingrediente = self.pega_ingrediente(nome)
+
+        '''ingrediente.nome = dados_alteracao_ingrediente["novo_nome"]
         ingrediente.unidade_medida = dados_alteracao_ingrediente["nova_unidade_medida"]
         ingrediente.quantidade = dados_alteracao_ingrediente["nova_quantidade"]
-        self.__tela_ingredientes.feedback_sucesso()
+        self.__tela_ingredientes.feedback_sucesso()'''
 
-    def excluir_ingrediente(self):
-        nome_ingrediente_deletado = self.__tela_ingredientes.excluir_ingrediente()
-        ingrediente_deletado = self.pega_ingrediente(nome_ingrediente_deletado)
+    def excluir_ingrediente(self, nome):
+        ingrediente_deletado = self.pega_ingrediente(nome)
         self.listagem_ingredientes.remove(ingrediente_deletado)
         del ingrediente_deletado
-        self.__tela_ingredientes.feedback_sucesso()
+        self.__tela_ingredientes_acoes.feedback_sucesso()
 
     # ------ MÉTODOS INTERNOS ------
 
@@ -75,7 +74,7 @@ class ControladorIngrediente:
                     return ingrediente
             raise ValueError
         except ValueError:
-            self.__tela_ingredientes.erro_nao_cadastrado(nome)
+            self.__tela_ingredientes_acoes.erro_nao_cadastrado(nome)
             self.abre_tela()
 
     @property

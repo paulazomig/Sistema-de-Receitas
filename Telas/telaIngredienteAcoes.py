@@ -3,8 +3,9 @@ import PySimpleGUI as sg
 
 
 class TelaIngredienteAcoes(AbstractTela):
+    sg.ChangeLookAndFeel('LightGreen')
+
     def init_components_cadastro(self):
-        sg.ChangeLookAndFeel('LightGreen')
         layout = [[sg.Text('Novo Ingrediente')],
                   [sg.Text('Nome:'), sg.InputText(key='nome')],
                   [sg.Text('Unidade de Medida:'), sg.InputText(key='unidade_medida')],
@@ -13,16 +14,42 @@ class TelaIngredienteAcoes(AbstractTela):
 
         self.__window = sg.Window('Cadastro de Ingrediente', default_element_size=(40, 1)).Layout(layout)
         button, values = self.__window.Read()
-        if values['nome'] != '' and values['unidade_medida'] != '' and int(values['quantidade']) >= 0:
+        try:
+            quantidade = float(values['quantidade'])
+        except ValueError:
+            self.__window.Close()
+            self.erro_valor()
+
+        if values['nome'] != '' and values['unidade_medida'] != '' and quantidade >= 0:
             self.__window.Close()
             return {"nome": values['nome'], "unidade_medida": values['unidade_medida'], "quantidade": int(values['quantidade'])}
         else:
-            print("Erro nos valores inseridos! Os valores de nome e unidade de medida não devem ser vazios, "
-                  "o valor de quantidade deve ser >= 0.")
             self.__window.Close()
+            self.erro_cadastro()
+
+    def init_alteracao(self):
+        layout = [[sg.Text('Alteração de Ingrediente')],
+                  [sg.Text('Nome:'), sg.InputText(key='nome')],
+                  [sg.Submit(), sg.Cancel()]]
+
+        self.__window = sg.Window('Alteração de Ingrediente', default_element_size=(40, 1)).Layout(layout)
+        button, values = self.__window.Read()
+        self.__window.Close()
+
+        if values['nome'] == '':
+            self.erro_branco()
+        else:
+            return values
+
+    # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
+
+    def erro_cadastro(self):
+        sg.Popup("Erro de Cadastro", "Atenção! Os valores de nome e unidade de medida não devem ser vazios e "
+                                     "o valor de quantidade deve ser >= 0.")
 
     def erro_ja_cadastrado(self, nome):
-        pass
+        sg.Popup("Item Já Cadastrado", "Não é possível completar a operação -  o ingrediente {} já foi cadastrado.".format(nome))
 
     def erro_nao_cadastrado(self, nome):
-        pass
+        sg.Popup("Item Não Cadastrado", "O ingrediente {} não foi encontrado. Por favor cadastrar ou selecionar o ingrediente.".format(nome))
+

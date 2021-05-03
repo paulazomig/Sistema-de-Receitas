@@ -3,10 +3,11 @@ import PySimpleGUI as sg
 
 
 class TelaIngrediente(AbstractTela):
+    sg.ChangeLookAndFeel('LightGreen')
+
     def init_components(self, lista):
-        sg.ChangeLookAndFeel('LightGreen')
         layout = [[sg.Text('Selecione uma opção:')],
-                  [sg.InputCombo(lista, size=(20,3), key='cb_opcoes')],
+                  [sg.Text('Ingredientes:'), sg.InputCombo(lista, size=(20,3), key='cb_opcoes')],
                   [sg.Button('Cadastrar Ingrediente'), sg.Button('Alterar Ingrediente'), sg.Button('Excluir Ingrediente'), sg.Button('Ver Estoque')],
                   [sg.Button('Retornar ao Menu Principal')]]
 
@@ -30,7 +31,7 @@ class TelaIngrediente(AbstractTela):
             else:
                 print("Erro nos valores inseridos! Os valores de nome e unidade de medida não devem ser vazios, "
                       "o valor de quantidade deve ser >= 0.")
-                return'''
+                return
 
     def alterar_ingrediente(self):
         print("Qual ingrediente deseja alterar?")
@@ -51,14 +52,12 @@ class TelaIngrediente(AbstractTela):
     def excluir_ingrediente(self):
         print("Qual ingrediente deseja excluir?")
         nome = input("Nome: ")
-        return nome
+        return nome'''
 
     # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
 
     def erro_ja_cadastrado(self, nome):
-        print("Não é possível completar a operação -  o ingrediente {} já foi cadastrado.\n".format(nome))
-        return
+        pass
 
     def erro_nao_cadastrado(self, nome):
-        print("O ingrediente {} não foi encontrado. Por favor cadastrar o ingrediente.\n".format(nome))
-        return
+        pass
