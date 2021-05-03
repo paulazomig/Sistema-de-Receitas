@@ -3,8 +3,9 @@ import PySimpleGUI as sg
 
 
 class TelaSistema(AbstractTela):
+    sg.ChangeLookAndFeel('LightGreen')
+
     def init_components(self):
-        sg.ChangeLookAndFeel('LightGreen')
         layout = [[sg.Text('Selecione uma opção:')],
                   [sg.Button('Ingredientes'), sg.Button('Receitas'), sg.Button('Finalizar Sistema')]]
 

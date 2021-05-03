@@ -28,18 +28,7 @@ class TelaIngredienteAcoes(AbstractTela):
             self.erro_cadastro()
 
     def init_alteracao(self):
-        layout = [[sg.Text('Alteração de Ingrediente')],
-                  [sg.Text('Nome:'), sg.InputText(key='nome')],
-                  [sg.Submit(), sg.Cancel()]]
-
-        self.__window = sg.Window('Alteração de Ingrediente', default_element_size=(40, 1)).Layout(layout)
-        button, values = self.__window.Read()
-        self.__window.Close()
-
-        if values['nome'] == '':
-            self.erro_branco()
-        else:
-            return values
+        pass
 
     # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
 
