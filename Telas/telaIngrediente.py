@@ -1,14 +1,21 @@
-from Telas.abstractTelaExcecoes import AbstractTela
+from Telas.abstractTela import AbstractTela
+import PySimpleGUI as sg
 
 
 class TelaIngrediente(AbstractTela):
-    def tela_opcoes(self):
-        print("Escolha Opção:\n1. Cadastrar Ingredientes\n2. Alterar Cadastro de Ingrediente\n3. Listar "
-              "Ingredientes\n4. Excluir Ingrediente\n0. Retornar ao Menu Principal")
-        opcao = int(input())
-        return opcao
+    def init_components(self, lista):
+        sg.ChangeLookAndFeel('LightGreen')
+        layout = [[sg.Text('Selecione uma opção:')],
+                  [sg.InputCombo(lista, size=(20,3), key='cb_opcoes')],
+                  [sg.Button('Cadastrar Ingrediente'), sg.Button('Alterar Ingrediente'), sg.Button('Excluir Ingrediente'), sg.Button('Ver Estoque')],
+                  [sg.Button('Retornar ao Menu Principal')]]
 
-    def dados_ingrediente(self):
+        self.__window = sg.Window('Opções Ingredientes').Layout(layout)
+        button, values = self.__window.Read()
+        self.__window.Close()
+        return button, values
+
+    '''def dados_ingrediente(self):
         print("INCLUIR INGREDIENTE:")
         nome = input("Nome: ")
         unidade_medida = input("Unidade de medida: ")
@@ -23,7 +30,7 @@ class TelaIngrediente(AbstractTela):
             else:
                 print("Erro nos valores inseridos! Os valores de nome e unidade de medida não devem ser vazios, "
                       "o valor de quantidade deve ser >= 0.")
-                return
+                return'''
 
     def alterar_ingrediente(self):
         print("Qual ingrediente deseja alterar?")

@@ -18,15 +18,15 @@ class ControladorSistema:
     def abre_tela(self):
         while True:
             try:
-                opcao_escolhida = self.__tela_sistema.opcoes()
+                opcao_escolhida = self.__tela_sistema.init_components()
 
-                if opcao_escolhida == 1:
+                if opcao_escolhida == 'Ingredientes':
                     self.__controlador_ingredientes.abre_tela()
 
-                if opcao_escolhida == 2:
+                if opcao_escolhida == 'Receitas':
                     self.__controlador_receitas.abre_tela()
 
-                if opcao_escolhida == 0:
+                if opcao_escolhida == 'Finalizar Sistema':
                     self.encerrar_sistema()
                 else:
                     raise ValueError

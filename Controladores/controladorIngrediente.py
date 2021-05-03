@@ -1,25 +1,49 @@
 from Entidades.ingrediente import Ingrediente
 from Telas.telaIngrediente import TelaIngrediente
+from Telas.telaIngredienteEstoque import TelaIngredienteEstoque
+from Telas.telaIngredienteAcoes import TelaIngredienteAcoes
 
 
 class ControladorIngrediente:
     def __init__(self, controlador_sistema):
         self.__controlador_sistema = controlador_sistema
         self.__tela_ingredientes = TelaIngrediente()
+        self.__tela_ingredientes_estoque = TelaIngredienteEstoque()
+        self.__tela_ingredientes_acoes = TelaIngredienteAcoes()
         self.listagem_ingredientes = []
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastrar_ingrediente, 2: self.alterar_ingrediente, 3: self.listar_ingredientes, 4: self.excluir_ingrediente, 0: self.retornar_menu_principal}
+        lista_opcoes = {'Cadastrar Ingrediente': self.cadastrar_ingrediente, 'Alterar Ingrediente': self.alterar_ingrediente,
+                        'Excluir Ingrediente': self.excluir_ingrediente, 'Ver Estoque': self.ver_estoque,
+                        'Retornar ao Menu Principal': self.retornar_menu_principal}
 
         while True:
             try:
-                lista_opcoes[self.__tela_ingredientes.tela_opcoes()]()
+                lista = []
+                if not self.listagem_ingredientes:
+                    pass
+                else:
+                    for ingrediente in self.listagem_ingredientes:
+                        lista.append(ingrediente.nome)
+                opcao, valor = self.__tela_ingredientes.init_components(lista)
+
+                if opcao == 'Alterar Ingrediente':
+                    lista_opcoes[opcao](valor['cb_opcoes'])
+                else:
+                    lista_opcoes[opcao]()
             except Exception:
                 self.__tela_ingredientes.erro_menu()
                 self.abre_tela()
 
+    def ver_estoque(self):
+        ing = ''
+        for ingrediente in self.listagem_ingredientes:
+            ing += ingrediente.nome.upper() + ' - ' + str(ingrediente.quantidade) + ' ' + ingrediente.unidade_medida.upper() + '\n'
+        self.__tela_ingredientes_estoque.init_components(ing)
+        self.abre_tela()
+
     def cadastrar_ingrediente(self):
-        dados_ingrediente = self.__tela_ingredientes.dados_ingrediente()
+        dados_ingrediente = self.__tela_ingredientes_acoes.init_components_cadastro()
         novo_ingrediente = Ingrediente(dados_ingrediente["nome"], dados_ingrediente["unidade_medida"], dados_ingrediente["quantidade"])
         if novo_ingrediente in self.listagem_ingredientes:
             self.__tela_ingredientes.erro_ja_cadastrado(novo_ingrediente.nome)
@@ -34,13 +58,6 @@ class ControladorIngrediente:
         ingrediente.unidade_medida = dados_alteracao_ingrediente["nova_unidade_medida"]
         ingrediente.quantidade = dados_alteracao_ingrediente["nova_quantidade"]
         self.__tela_ingredientes.feedback_sucesso()
-
-    def listar_ingredientes(self):
-        if not self.listagem_ingredientes:
-            self.__tela_ingredientes.erro_lista_vazia()
-        else:
-            for ingrediente in self.listagem_ingredientes:
-                self.__tela_ingredientes.exibir_ingredientes({"nome": ingrediente.nome, "unidade_medida": ingrediente.unidade_medida, "quantidade": ingrediente.quantidade})
 
     def excluir_ingrediente(self):
         nome_ingrediente_deletado = self.__tela_ingredientes.excluir_ingrediente()

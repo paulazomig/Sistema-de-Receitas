@@ -1,4 +1,4 @@
-from Telas.abstractTelaExcecoes import AbstractTela
+from Telas.abstractTela import AbstractTela
 
 
 class TelaReceita(AbstractTela):
