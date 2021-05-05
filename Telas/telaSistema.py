@@ -3,17 +3,23 @@ import PySimpleGUI as sg
 
 
 class TelaSistema(AbstractTela):
-    sg.ChangeLookAndFeel('LightGreen')
+
+    def __init__(self):
+        self.__window = None
+        self.init_components()
 
     def init_components(self):
-        layout = [[sg.Text('Selecione uma opção:')],
-                  [sg.Button('Ingredientes'), sg.Button('Receitas'), sg.Button('Finalizar Sistema')]]
+        layout = [[sg.Text('Selecione uma opção:', justification='center')],
+                  [sg.Button('Ingredientes', key='ingredientes'), sg.Button('Receitas', key='receitas'), sg.Button('Finalizar Sistema', key='finalizar')]]
 
         self.__window = sg.Window('Menu Inicial').Layout(layout)
 
+    def abre_tela(self):
         button, values = self.__window.Read()
-        self.__window.Close()
         return button
+
+    def fecha_tela(self):
+        self.__window.Close()
 
     def erro_ja_cadastrado(self, nome):
         pass

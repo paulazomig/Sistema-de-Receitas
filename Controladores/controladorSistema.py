@@ -12,27 +12,27 @@ class ControladorSistema:
     def inicializa_sistema(self):
         self.abre_tela()
 
+    def abre_tela(self):
+        lista_opcoes = {'ingredientes': self.abre_tela_ingredientes,
+                        'receitas': self.abre_tela_receitas,
+                        'finalizar': self.encerrar_sistema}
+
+        while True:
+            opcao_menu = self.__tela_sistema.abre_tela()
+            self.__tela_sistema.fecha_tela()
+            if opcao_menu is None:
+                self.encerrar_sistema()
+            else:
+                lista_opcoes[opcao_menu]()
+
+    def abre_tela_ingredientes(self):
+        self.__controlador_ingredientes.abre_tela()
+
+    def abre_tela_receitas(self):
+        self.__controlador_receitas.abre_tela()
+
     def encerrar_sistema(self):
         exit(0)
-
-    def abre_tela(self):
-        while True:
-            try:
-                opcao_escolhida = self.__tela_sistema.init_components()
-
-                if opcao_escolhida == 'Ingredientes':
-                    self.__controlador_ingredientes.abre_tela()
-
-                if opcao_escolhida == 'Receitas':
-                    self.__controlador_receitas.abre_tela()
-
-                if opcao_escolhida == 'Finalizar Sistema':
-                    self.encerrar_sistema()
-                else:
-                    raise ValueError
-            except Exception:
-                self.__tela_sistema.erro_menu()
-                self.abre_tela()
 
     @property
     def controlador_ingrediente(self):
