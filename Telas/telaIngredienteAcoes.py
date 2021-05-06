@@ -33,7 +33,7 @@ class TelaIngredienteAcoes(AbstractTela):
                       [sg.Text('Quantidade em Estoque:'), sg.InputText(infos_tela['quantidade'], key='quantidade')],
                       [sg.Submit(), sg.Cancel(key='cancel')]]
 
-        self.__window = sg.Window('Cadastro de Ingrediente', default_element_size=(40, 1)).Layout(layout)
+        self.__window = sg.Window('Cadastro de Ingrediente', location=(450,300), default_element_size=(40, 1)).Layout(layout)
 
     def abre_tela(self, infos_tela):
         self.init_components(infos_tela)

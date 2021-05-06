@@ -17,7 +17,7 @@ class TelaIngrediente(AbstractTela):
                    sg.Button('Ver Estoque', key='estoque')],
                   [sg.Button('Retornar ao Menu Principal', key='retorna')]]
 
-        self.__window = sg.Window('Opções Ingredientes').Layout(layout)
+        self.__window = sg.Window('Opções Ingredientes', location=(400,300), element_justification='center').Layout(layout)
 
     def abre_tela(self, cb_lista):
         self.init_components(cb_lista)
