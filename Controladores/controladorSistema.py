@@ -21,7 +21,7 @@ class ControladorSistema:
             opcao_menu = self.__tela_sistema.abre_tela()
             self.__tela_sistema.fecha_tela()
             if opcao_menu is None:
-                self.encerrar_sistema()
+                self.abre_tela()
             else:
                 lista_opcoes[opcao_menu]()
 

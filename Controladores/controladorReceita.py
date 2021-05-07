@@ -10,17 +10,28 @@ class ControladorReceita:
         self.__controlador_ingrediente = self.__controlador_sistema.controlador_ingrediente
         self.__tela_receitas = TelaReceita()
         self.__lista_receitas = []
+        self.lista_nome_receitas = []
         self.__eventos_receita = []
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastrar_receita, 2: self.alterar_receita, 3: self.pesquisar_receita, 4: self.fazer_receita,
-                        5: self.listar_receitas, 6: self.ver_relatorio_receita, 7: self.excluir_receita, 0: self.retornar_menu_principal}
+        lista_opcoes = {'cadastro': self.cadastrar_receita,
+                        'alteracao': self.alterar_receita,
+                        'pesquisa': self.pesquisar_receita,
+                        4: self.fazer_receita,
+                        'relatorio': self.ver_relatorio_receita,
+                        'exclusao': self.excluir_receita,
+                        'retorna': self.retornar_menu_principal}
+
         while True:
-            try:
-                lista_opcoes[self.__tela_receitas.tela_opcoes()]()
-            except ValueError:
-                self.__tela_receitas.erro_menu()
-                self.abre_tela()
+            opcao_menu, valor_menu = self.__tela_receitas.abre_tela(self.lista_nome_receitas)
+            self.__tela_receitas.fecha_tela()
+            if opcao_menu is None:
+                exit(0)
+
+            if opcao_menu == 'alteracao' or opcao_menu == 'exclusao':
+                lista_opcoes[opcao_menu](valor_menu['cb_opcao'])
+            else:
+                lista_opcoes[opcao_menu]()
 
     def cadastrar_receita(self):
         dados_receita = self.__tela_receitas.obter_dados_receita()
@@ -32,6 +43,7 @@ class ControladorReceita:
             self.__tela_receitas.erro_ja_cadastrado(nova_receita.titulo)
             self.abre_tela()
         self.__lista_receitas.append(nova_receita)
+        self.lista_nome_receitas.append(nova_receita.titulo)
         self.__tela_receitas.feedback_sucesso()
 
         self.registra_evento("Cadastro de receita", nova_receita.titulo)
@@ -39,10 +51,13 @@ class ControladorReceita:
     def alterar_receita(self):
         titulo_receita_alterada = self.__tela_receitas.alterar_receita()
         receita_alterada = self.pega_receita(titulo_receita_alterada)
+        self.lista_nome_receitas.remove(receita_alterada.titulo)
+
         dados_receita = self.__tela_receitas.obter_dados_receita()
         receita_alterada.titulo = dados_receita["titulo"]
         receita_alterada.ingredientes_receita = self.criar_lista_ingredientes(dados_receita["ingredientes_e_quantidades"])
         receita_alterada.preparo = dados_receita["preparo"]
+        self.lista_nome_receitas.append(receita_alterada.titulo)
         self.__tela_receitas.feedback_sucesso()
 
         self.registra_evento("Alteração de receita", receita_alterada.titulo)
@@ -74,17 +89,6 @@ class ControladorReceita:
 
         self.registra_evento("Receita feita", titulo_receita_feita)
 
-    def listar_receitas(self):
-        if not self.__lista_receitas:
-            self.__tela_receitas.erro_lista_vazia()
-        else:
-            lista_receitas = ''
-            for receita in self.__lista_receitas:
-                lista_receitas += str(receita.titulo.upper()) + '\n'
-            self.__tela_receitas.exibir_lista_receitas(lista_receitas)
-
-        self.registra_evento("Exibição de listagem de receitas", "Todas as receitas registradas")
-
     def ver_relatorio_receita(self):
         if not self.__eventos_receita:
             self.__tela_receitas.erro_lista_vazia()
@@ -94,7 +98,9 @@ class ControladorReceita:
     def excluir_receita(self):
         titulo_receita_deletada = self.__tela_receitas.excluir_receita()
         receita_deletada = self.pega_receita(titulo_receita_deletada)
+        self.lista_nome_receitas.remove(receita_deletada.titulo)
         self.__lista_receitas.remove(receita_deletada)
+
         del receita_deletada
         self.__tela_receitas.feedback_sucesso()
 
