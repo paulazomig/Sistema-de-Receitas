@@ -98,7 +98,3 @@ class TelaReceita(AbstractTela):
     def erro_nao_cadastrado(self, nome):
         print("A receita {} não foi encontrada. Por favor cadastrar a receita.\n".format(nome))
         return
-
-    def erro_ingredientes_insuficientes(self, nome):
-        print("O ingrediente {} não possui quantidade suficiente para essa receita!\n".format(nome))
-        return

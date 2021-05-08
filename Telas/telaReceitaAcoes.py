@@ -58,38 +58,38 @@ class TelaReceitaAcoes(AbstractTela):
                 ingredientes_receita = {}
                 loop = True
                 while loop:
-                    print('loop')
                     button_tela_ing, values_tela_ing = self.__window_ingrediente.Read()
-                    if button_tela_ing == 'finalizar':
-                        loop = False
-                        self.__window_ingrediente.Close()
-                    elif button_tela_ing == 'cancel':
+                    if button_tela_ing == 'cancel':
                         self.__window_ingrediente.Close()
                         return None
                     elif not button_tela_ing:
                         exit(0)
 
-                    #else:
-                    try:
-                        qtd = int(values_tela_ing['quantidade'])
-                    except Exception:
-                        self.__window_ingrediente.Close()
-                        self.erro_valor()
-
-                        return None
-
-                    if values_tela_ing['cb_opcao'] != '':
-                        nome = values_tela_ing['cb_opcao']
-                        ingredientes_receita[nome] = qtd
-                        print(ingredientes_receita)
-
-                        #self.__window_ingrediente.FindElement('cb_opcao').Update('')
-                        #self.__window_ingrediente.FindElement('quantidade').Update('')
-
-                        self.feedback_sucesso()
                     else:
-                        self.erro_cadastro()
-                        return None
+                        try:
+                            qtd = int(values_tela_ing['quantidade'])
+                        except Exception:
+                            self.__window_ingrediente.Close()
+                            self.erro_valor()
+
+                            return None
+
+                        if values_tela_ing['cb_opcao'] != '':
+                            nome = values_tela_ing['cb_opcao']
+                            ingredientes_receita[nome] = qtd
+
+                            if button_tela_ing == 'finalizar':
+                                loop = False
+                                self.__window_ingrediente.Close()
+                                self.feedback_sucesso()
+                            else:
+                                self.__window_ingrediente.FindElement('cb_opcao').Update('')
+                                self.__window_ingrediente.FindElement('quantidade').Update('')
+
+                                self.feedback_sucesso()
+                        else:
+                            self.erro_cadastro()
+                            return None
                 return {'titulo': values['titulo'], 'ingredientes_receita': ingredientes_receita, 'preparo': values['preparo']}
 
     # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
