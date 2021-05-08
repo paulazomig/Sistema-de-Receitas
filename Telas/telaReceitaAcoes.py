@@ -35,9 +35,7 @@ class TelaReceitaAcoes(AbstractTela):
                                 sg.Button('Finalizar Cadastro da Receita', key='finalizar'),
                                 sg.Button('Cancelar', key='cancel')]]
 
-        self.__window = sg.Window('Cadastro de Receita',
-                                  location=(450, 300),
-                                  default_element_size=(60, 1)).Layout(layout)
+        self.__window = sg.Window('Cadastro de Receita', location=(450, 300), default_element_size=(60, 1)).Layout(layout)
 
         self.__window_ingrediente = sg.Window('Cadastro de Ingredientes da Receita',
                                               location=(450, 300),
@@ -53,34 +51,40 @@ class TelaReceitaAcoes(AbstractTela):
         elif not button:
             exit(0)
         else:
-            ingredientes_receita = {}
-            loop = True
             if values['titulo'] == '':
                 self.erro_cadastro()
                 return None
             else:
+                ingredientes_receita = {}
+                loop = True
                 while loop:
+                    print('loop')
                     button_tela_ing, values_tela_ing = self.__window_ingrediente.Read()
                     if button_tela_ing == 'finalizar':
                         loop = False
                         self.__window_ingrediente.Close()
-                    if button_tela_ing == 'cancel':
+                    elif button_tela_ing == 'cancel':
+                        self.__window_ingrediente.Close()
                         return None
                     elif not button_tela_ing:
                         exit(0)
 
+                    #else:
                     try:
                         qtd = int(values_tela_ing['quantidade'])
                     except Exception:
+                        self.__window_ingrediente.Close()
                         self.erro_valor()
+
                         return None
 
                     if values_tela_ing['cb_opcao'] != '':
                         nome = values_tela_ing['cb_opcao']
                         ingredientes_receita[nome] = qtd
+                        print(ingredientes_receita)
 
-                        self.__window_ingrediente.FindElement('cb_opcao').Update('')
-                        self.__window_ingrediente.FindElement('quantidade').Update('')
+                        #self.__window_ingrediente.FindElement('cb_opcao').Update('')
+                        #self.__window_ingrediente.FindElement('quantidade').Update('')
 
                         self.feedback_sucesso()
                     else:

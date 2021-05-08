@@ -1,6 +1,7 @@
 from Entidades.receita import Receita
 from Telas.telaReceita import TelaReceita
 from Telas.telaReceitaAcoes import TelaReceitaAcoes
+from Telas.telaReceitaView import TelaReceitaView
 from Entidades.ingredienteReceita import IngredienteReceita
 from datetime import date
 
@@ -11,6 +12,7 @@ class ControladorReceita:
         self.__controlador_ingrediente = self.__controlador_sistema.controlador_ingrediente
         self.__tela_receitas = TelaReceita()
         self.__tela_receitas_acoes = TelaReceitaAcoes()
+        self.__tela_receita_view = TelaReceitaView()
         self.__lista_receitas = []
         self.lista_nome_receitas = []
         self.__eventos_receita = []
@@ -18,8 +20,7 @@ class ControladorReceita:
     def abre_tela(self):
         lista_opcoes = {'cadastro': self.cadastrar_receita,
                         'alteracao': self.alterar_receita,
-                        'pesquisa': self.pesquisar_receita,
-                        4: self.fazer_receita,
+                        'view': self.visualizar_receita,
                         'relatorio': self.ver_relatorio_receita,
                         'exclusao': self.excluir_receita,
                         'retorna': self.retornar_menu_principal}
@@ -30,7 +31,7 @@ class ControladorReceita:
             if opcao_menu is None:
                 exit(0)
 
-            if opcao_menu == 'alteracao' or opcao_menu == 'exclusao':
+            if opcao_menu == 'alteracao' or opcao_menu == 'exclusao' or opcao_menu == 'view':
                 lista_opcoes[opcao_menu](valor_menu['cb_opcao'])
             else:
                 lista_opcoes[opcao_menu]()
@@ -68,32 +69,37 @@ class ControladorReceita:
 
         self.registra_evento("Alteração de receita", receita_alterada.titulo)
 
-    def pesquisar_receita(self):
-        titulo_receita_pesquisada = self.__tela_receitas.pesquisar_receita()
-        receita = self.pega_receita(titulo_receita_pesquisada)
+    def visualizar_receita(self, titulo):
+        receita = self.pega_receita(titulo)
         ingredientes = ''
         for i in receita.ingredientes_receita:
             ingredientes += str(i.nome) + ' - ' + str(i.quantidade) + ' ' + str(i.unidade_medida) + '\n'
+        titulo = receita.titulo
+        preparo = receita.preparo
 
-        self.__tela_receitas.exibir_receita_pesquisada({"titulo": receita.titulo, "ingredientes": ingredientes, "preparo": receita.preparo})
-
+        button_value = self.__tela_receita_view.abre_tela(titulo, ingredientes, preparo)
         self.registra_evento("Pesquisa de receita", receita.titulo)
+        if button_value is None:
+            exit(0)
+        elif button_value == 'retornar':
+            self.abre_tela()
+        else:
+            self.fazer_receita(titulo)
 
-    def fazer_receita(self):
-        titulo_receita_feita = self.__tela_receitas.fazer_receita()
-        receita = self.pega_receita(titulo_receita_feita)
+    def fazer_receita(self, titulo):
+        receita = self.pega_receita(titulo)
 
         for i in receita.ingredientes_receita:
             ingrediente_estoque = self.__controlador_ingrediente.pega_ingrediente(i.nome)
             if ingrediente_estoque.quantidade < i.quantidade:
-                self.__tela_receitas.erro_ingredientes_insuficientes(ingrediente_estoque.nome)
+                self.__tela_receita_view.erro_ingredientes_insuficientes(ingrediente_estoque.nome)
                 self.abre_tela()
         for ingredientes_utilizados in receita.ingredientes_receita:
             ingrediente_deduzir = self.__controlador_ingrediente.pega_ingrediente(ingredientes_utilizados.nome)
             ingrediente_deduzir.quantidade -= ingredientes_utilizados.quantidade
         self.__tela_receitas.feedback_sucesso()
 
-        self.registra_evento("Receita feita", titulo_receita_feita)
+        self.registra_evento("Receita feita", titulo)
 
     def ver_relatorio_receita(self):
         if not self.__eventos_receita:

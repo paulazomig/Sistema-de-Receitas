@@ -12,9 +12,9 @@ class TelaReceita(AbstractTela):
                   [sg.Text('Receitas:'), sg.InputCombo(cb_lista, size=(30,1), key='cb_opcao')],
                   [sg.Button('Cadastrar Receita', key='cadastro'),
                    sg.Button('Alterar Receita', key='alteracao'),
-                   sg.Button('Pesquisar Receita', key='pesquisa'),
-                   sg.Button('Excluir Receita', key='exclusao'),
-                   sg.Button('Ver Relatório', key='relatorio')],
+                   sg.Button('Visualizar Receita', key='view'),
+                   sg.Button('Ver Relatório', key='relatorio'),
+                   sg.Button('Excluir Receita', key='exclusao')],
                   [sg.Button('Retornar ao Menu Principal', key='retorna')]]
 
         self.__window = sg.Window('Opções Receitas', location=(400,300), element_justification='center').Layout(layout)
