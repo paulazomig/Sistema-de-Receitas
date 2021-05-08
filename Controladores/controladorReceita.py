@@ -1,5 +1,6 @@
 from Entidades.receita import Receita
 from Telas.telaReceita import TelaReceita
+from Telas.telaReceitaAcoes import TelaReceitaAcoes
 from Entidades.ingredienteReceita import IngredienteReceita
 from datetime import date
 
@@ -9,6 +10,7 @@ class ControladorReceita:
         self.__controlador_sistema = controlador_sistema
         self.__controlador_ingrediente = self.__controlador_sistema.controlador_ingrediente
         self.__tela_receitas = TelaReceita()
+        self.__tela_receitas_acoes = TelaReceitaAcoes()
         self.__lista_receitas = []
         self.lista_nome_receitas = []
         self.__eventos_receita = []
@@ -34,7 +36,8 @@ class ControladorReceita:
                 lista_opcoes[opcao_menu]()
 
     def cadastrar_receita(self):
-        dados_receita = self.__tela_receitas.obter_dados_receita()
+        ingredientes_estoque = self.lista_ingredientes_estoque()
+        dados_receita = self.__tela_receitas_acoes.abre_tela(ingredientes_estoque)
         ingredientes_receita = self.criar_lista_ingredientes(dados_receita["ingredientes_e_quantidades"])
 
         nova_receita = Receita(dados_receita["titulo"], ingredientes_receita, dados_receita["preparo"])
@@ -128,6 +131,10 @@ class ControladorReceita:
             add_ingrediente = IngredienteReceita(self.__controlador_ingrediente.pega_ingrediente(nome_ingrediente), dados_ingredientes[nome_ingrediente])
             ingredientes_receita.append(add_ingrediente)
         return ingredientes_receita
+
+    def lista_ingredientes_estoque(self):
+        lista_ingredientes_estoque = self.__controlador_ingrediente.listagem_nome_ingredientes
+        return lista_ingredientes_estoque
 
     def retornar_menu_principal(self):
         self.__controlador_sistema.abre_tela()

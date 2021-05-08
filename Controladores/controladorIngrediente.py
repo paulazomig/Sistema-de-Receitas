@@ -98,6 +98,10 @@ class ControladorIngrediente:
     def lista_ingredientes(self):
         return self.__lista_ingredientes
 
+    @property
+    def listagem_nome_ingredientes(self):
+        return self.lista_nome_ingredientes
+
     def retornar_menu_principal(self):
         self.__tela_ingredientes.fecha_tela()
         self.__controlador_sistema.inicializa_sistema()
