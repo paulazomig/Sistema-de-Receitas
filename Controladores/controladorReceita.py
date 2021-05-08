@@ -37,8 +37,11 @@ class ControladorReceita:
 
     def cadastrar_receita(self):
         ingredientes_estoque = self.lista_ingredientes_estoque()
-        dados_receita = self.__tela_receitas_acoes.abre_tela(ingredientes_estoque)
-        ingredientes_receita = self.criar_lista_ingredientes(dados_receita["ingredientes_e_quantidades"])
+        infos_tela = None
+        dados_receita = self.__tela_receitas_acoes.abre_tela(ingredientes_estoque, infos_tela)
+        if dados_receita is None:
+            self.abre_tela()
+        ingredientes_receita = self.criar_lista_ingredientes(dados_receita["ingredientes_receita"])
 
         nova_receita = Receita(dados_receita["titulo"], ingredientes_receita, dados_receita["preparo"])
 
@@ -47,21 +50,21 @@ class ControladorReceita:
             self.abre_tela()
         self.__lista_receitas.append(nova_receita)
         self.lista_nome_receitas.append(nova_receita.titulo)
-        self.__tela_receitas.feedback_sucesso()
 
         self.registra_evento("Cadastro de receita", nova_receita.titulo)
 
-    def alterar_receita(self):
-        titulo_receita_alterada = self.__tela_receitas.alterar_receita()
-        receita_alterada = self.pega_receita(titulo_receita_alterada)
+    def alterar_receita(self, titulo):
+        ingredientes_estoque = self.lista_ingredientes_estoque()
+        receita_alterada = self.pega_receita(titulo)
         self.lista_nome_receitas.remove(receita_alterada.titulo)
 
-        dados_receita = self.__tela_receitas.obter_dados_receita()
+        infos_tela = {'titulo': receita_alterada.titulo, 'preparo': receita_alterada.preparo, 'ingredientes': receita_alterada.ingredientes_receita}
+        dados_receita = self.__tela_receitas_acoes.abre_tela(ingredientes_estoque, infos_tela)
+
         receita_alterada.titulo = dados_receita["titulo"]
-        receita_alterada.ingredientes_receita = self.criar_lista_ingredientes(dados_receita["ingredientes_e_quantidades"])
+        receita_alterada.ingredientes_receita = self.criar_lista_ingredientes(dados_receita["ingredientes_receita"])
         receita_alterada.preparo = dados_receita["preparo"]
         self.lista_nome_receitas.append(receita_alterada.titulo)
-        self.__tela_receitas.feedback_sucesso()
 
         self.registra_evento("Alteração de receita", receita_alterada.titulo)
 

@@ -61,7 +61,6 @@ class TelaIngredienteAcoes(AbstractTela):
 
         try:
             int(values['quantidade'])
-
         except Exception:
             self.erro_valor()
             return None

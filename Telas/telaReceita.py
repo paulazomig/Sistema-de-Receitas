@@ -14,7 +14,7 @@ class TelaReceita(AbstractTela):
                    sg.Button('Alterar Receita', key='alteracao'),
                    sg.Button('Pesquisar Receita', key='pesquisa'),
                    sg.Button('Excluir Receita', key='exclusao'),
-                   sg.Button('Ver Relatório', key='estoque')],
+                   sg.Button('Ver Relatório', key='relatorio')],
                   [sg.Button('Retornar ao Menu Principal', key='retorna')]]
 
         self.__window = sg.Window('Opções Receitas', location=(400,300), element_justification='center').Layout(layout)
