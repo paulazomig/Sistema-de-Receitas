@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 import pickle
+from Excecoes.no_key_exception import NoKeyException
+
 
 class AbstractDAO(ABC):
     @abstractmethod
@@ -26,14 +28,14 @@ class AbstractDAO(ABC):
         try:
             return self.__cache[key]
         except KeyError:
-            pass
+            raise NoKeyException()
 
     def remove(self, key):
         try:
             self.__cache.pop(key)
             self.__dump()
         except KeyError:
-            pass
+            raise NoKeyException()
 
     def get_all(self):
         return self.__cache.values()
@@ -42,5 +44,4 @@ class AbstractDAO(ABC):
         list = []
         for i in self.__cache:
             list.append(i)
-
         return list

@@ -39,7 +39,7 @@ class TelaIngredienteAcoes(AbstractTela):
         self.init_components(infos_tela)
         button, values = self.__window.Read()
         if button == 'cancel':
-            return None
+            return button, None
         elif not button:
             exit(0)
 
@@ -63,13 +63,15 @@ class TelaIngredienteAcoes(AbstractTela):
             int(values['quantidade'])
         except Exception:
             self.erro_valor()
-            return None
+            self.fecha_tela()
+            return button, None
 
         if values['nome'] != '' and int(values['quantidade']) >= 0:
-            return {"nome": values['nome'], "unidade_medida": medida, "quantidade": int(values['quantidade'])}
+            dados_controlador = {"nome": values['nome'], "unidade_medida": medida, "quantidade": int(values['quantidade'])}
+            return button, dados_controlador
         else:
             self.erro_cadastro()
-            return None
+            return button, None
 
     def fecha_tela(self):
         self.__window.Close()

@@ -17,6 +17,9 @@ class TelaIngredienteEstoque(AbstractTela):
     def abre_tela(self, infos_estoque):
         self.init_components(infos_estoque)
         button, values = self.__window.Read()
+        if button is None:
+            exit(0)
+
         self.__window.Close()
 
     def erro_ja_cadastrado(self, nome):

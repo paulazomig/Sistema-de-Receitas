@@ -46,14 +46,13 @@ class TelaReceitaAcoes(AbstractTela):
         button, values = self.__window.Read()
         self.__window.Close()
         if button == 'cancel':
-            self.__window.Close()
-            return None
+            return button, None
         elif not button:
             exit(0)
         else:
             if values['titulo'] == '':
                 self.erro_cadastro()
-                return None
+                return button, None
             else:
                 ingredientes_receita = {}
                 loop = True
@@ -61,7 +60,7 @@ class TelaReceitaAcoes(AbstractTela):
                     button_tela_ing, values_tela_ing = self.__window_ingrediente.Read()
                     if button_tela_ing == 'cancel':
                         self.__window_ingrediente.Close()
-                        return None
+                        return button_tela_ing, None
                     elif not button_tela_ing:
                         exit(0)
 
@@ -69,10 +68,8 @@ class TelaReceitaAcoes(AbstractTela):
                         try:
                             qtd = int(values_tela_ing['quantidade'])
                         except Exception:
-                            self.__window_ingrediente.Close()
                             self.erro_valor()
-
-                            return None
+                            continue
 
                         if values_tela_ing['cb_opcao'] != '':
                             nome = values_tela_ing['cb_opcao']
@@ -89,8 +86,10 @@ class TelaReceitaAcoes(AbstractTela):
                                 self.feedback_sucesso()
                         else:
                             self.erro_cadastro()
-                            return None
-                return {'titulo': values['titulo'], 'ingredientes_receita': ingredientes_receita, 'preparo': values['preparo']}
+                            return button_tela_ing, None
+                infos_receita = {'titulo': values['titulo'], 'ingredientes_receita': ingredientes_receita,
+                                 'preparo': values['preparo']}
+                return button, infos_receita
 
     # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
 

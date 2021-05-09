@@ -34,44 +34,60 @@ class ControladorIngrediente:
     def cadastrar_ingrediente(self):
         infos_tela = None
 
-        dados_ingrediente = self.__tela_ingredientes_acoes.abre_tela(infos_tela)
+        button, dados_ingrediente = self.__tela_ingredientes_acoes.abre_tela(infos_tela)
         self.__tela_ingredientes_acoes.fecha_tela()
 
-        if dados_ingrediente is None:
+        if button == 'cancel':
             self.abre_tela()
 
-        novo_ingrediente = Ingrediente(dados_ingrediente["nome"],
-                                       dados_ingrediente["unidade_medida"],
-                                       dados_ingrediente["quantidade"])
+        else:
+            if dados_ingrediente is None:
+                self.cadastrar_ingrediente()
 
-        if novo_ingrediente in self.dao.get_all():
-            self.__tela_ingredientes_acoes.erro_ja_cadastrado(novo_ingrediente.nome)
-            return
-        self.dao.add(novo_ingrediente.nome, novo_ingrediente)
+            novo_ingrediente = Ingrediente(dados_ingrediente["nome"],
+                                           dados_ingrediente["unidade_medida"],
+                                           dados_ingrediente["quantidade"])
 
-        self.__tela_ingredientes.feedback_sucesso()
+            if novo_ingrediente in self.dao.get_all():
+                self.__tela_ingredientes_acoes.erro_ja_cadastrado(novo_ingrediente.nome)
+                return
+            self.dao.add(novo_ingrediente.nome, novo_ingrediente)
+            self.__tela_ingredientes.feedback_sucesso()
+            self.abre_tela()
 
     def alterar_ingrediente(self, nome):
         ingrediente_alterado = self.dao.get(nome)
-        infos_tela = {'nome': ingrediente_alterado.nome, 'quantidade': ingrediente_alterado.quantidade}
-
-        dados_alteracao = self.__tela_ingredientes_acoes.abre_tela(infos_tela)
-        self.__tela_ingredientes_acoes.fecha_tela()
-        if dados_alteracao is None:
+        if ingrediente_alterado is None:
             self.abre_tela()
 
-        self.dao.remove(dados_alteracao['nome'])
+        infos_tela = {'nome': ingrediente_alterado.nome, 'quantidade': ingrediente_alterado.quantidade}
 
-        ingrediente_alterado.nome = dados_alteracao["nome"]
-        ingrediente_alterado.unidade_medida = dados_alteracao["unidade_medida"]
-        ingrediente_alterado.quantidade = dados_alteracao["quantidade"]
+        button, dados_alteracao = self.__tela_ingredientes_acoes.abre_tela(infos_tela)
+        self.__tela_ingredientes_acoes.fecha_tela()
 
-        self.dao.add(ingrediente_alterado.nome, ingrediente_alterado)
-        self.__tela_ingredientes.feedback_sucesso()
+        if button == 'cancel':
+            self.abre_tela()
+
+        else:
+            if dados_alteracao is None:
+                self.alterar_ingrediente(nome)
+
+            self.dao.remove(dados_alteracao['nome'])
+
+            ingrediente_alterado.nome = dados_alteracao["nome"]
+            ingrediente_alterado.unidade_medida = dados_alteracao["unidade_medida"]
+            ingrediente_alterado.quantidade = dados_alteracao["quantidade"]
+
+            self.dao.add(ingrediente_alterado.nome, ingrediente_alterado)
+            self.__tela_ingredientes.feedback_sucesso()
+            self.abre_tela()
 
     def excluir_ingrediente(self, nome):
-        self.dao.remove(nome)
-        self.__tela_ingredientes_acoes.feedback_sucesso()
+        valor = self.dao.remove(nome)
+        if valor == 'exception':
+            self.abre_tela()
+        else:
+            self.__tela_ingredientes_acoes.feedback_sucesso()
 
     def ver_estoque(self):
         infos_estoque = ''

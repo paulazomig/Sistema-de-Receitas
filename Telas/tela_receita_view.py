@@ -23,7 +23,9 @@ class TelaReceitaView(AbstractTela):
         self.init_components(titulo, ingredientes, preparo)
         button, values = self.__window.Read()
         self.__window.Close()
-        return(button)
+        if button is None:
+            exit(0)
+        return button
 
     def erro_ja_cadastrado(self, nome):
         pass

@@ -11,8 +11,13 @@ class ReceitaDAO(AbstractDAO):
             super().add(receita.titulo, receita)
 
     def get(self, key=str):
-        #implementar testes (not none, etc)
-        return super().get(key)
+        try:
+            return super().get(key)
+        except Exception:
+            return None
 
     def remove(self, key: str):
-        return super().remove(key)
+        try:
+            return super().remove(key)
+        except Exception:
+            return 'exception'
