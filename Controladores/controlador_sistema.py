@@ -1,6 +1,6 @@
-from Controladores.controladorIngrediente import ControladorIngrediente
-from Controladores.controladorReceita import ControladorReceita
-from Telas.telaSistema import TelaSistema
+from Controladores.controlador_ingrediente import ControladorIngrediente
+from Controladores.controlador_receita import ControladorReceita
+from Telas.tela_sistema import TelaSistema
 
 
 class ControladorSistema:
@@ -35,5 +35,5 @@ class ControladorSistema:
         exit(0)
 
     @property
-    def controlador_ingrediente(self):
-        return self.__controlador_ingredientes
+    def dao_ingrediente(self):
+        return self.__controlador_ingredientes.dao

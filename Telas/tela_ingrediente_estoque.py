@@ -1,4 +1,4 @@
-from Telas.abstractTela import AbstractTela
+from Telas.abstract_tela import AbstractTela
 import PySimpleGUI as sg
 
 

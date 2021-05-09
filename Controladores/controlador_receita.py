@@ -1,22 +1,22 @@
 from Entidades.receita import Receita
-from Telas.telaReceita import TelaReceita
-from Telas.telaReceitaAcoes import TelaReceitaAcoes
-from Telas.telaReceitaView import TelaReceitaView
-from Telas.telaReceitaRelatorio import TelaReceitaRelatorio
-from Entidades.ingredienteReceita import IngredienteReceita
+from Telas.tela_receita import TelaReceita
+from Telas.tela_receita_acoes import TelaReceitaAcoes
+from Telas.tela_receita_view import TelaReceitaView
+from Telas.tela_receita_relatorio import TelaReceitaRelatorio
+from Entidades.ingrediente_receita import IngredienteReceita
+from DAOs.receita_dao import ReceitaDAO
 from datetime import date
 
 
 class ControladorReceita:
     def __init__(self, controlador_sistema):
         self.__controlador_sistema = controlador_sistema
-        self.__controlador_ingrediente = self.__controlador_sistema.controlador_ingrediente
+        self.__controlador_ingrediente = self.__controlador_sistema.dao_ingrediente
+        self.__dao = ReceitaDAO()
         self.__tela_receitas = TelaReceita()
         self.__tela_receitas_acoes = TelaReceitaAcoes()
         self.__tela_receita_view = TelaReceitaView()
         self.__tela_receita_relatorio = TelaReceitaRelatorio()
-        self.__lista_receitas = []
-        self.lista_nome_receitas = []
         self.__eventos_receita = []
 
     def abre_tela(self):
@@ -28,7 +28,7 @@ class ControladorReceita:
                         'retorna': self.retornar_menu_principal}
 
         while True:
-            opcao_menu, valor_menu = self.__tela_receitas.abre_tela(self.lista_nome_receitas)
+            opcao_menu, valor_menu = self.__tela_receitas.abre_tela(self.__dao.get_all_names())
             self.__tela_receitas.fecha_tela()
             if opcao_menu is None:
                 exit(0)
@@ -39,7 +39,7 @@ class ControladorReceita:
                 lista_opcoes[opcao_menu]()
 
     def cadastrar_receita(self):
-        ingredientes_estoque = self.lista_ingredientes_estoque()
+        ingredientes_estoque = self.__controlador_ingrediente.get_all_names()
         infos_tela = None
         dados_receita = self.__tela_receitas_acoes.abre_tela(ingredientes_estoque, infos_tela)
         if dados_receita is None:
@@ -48,18 +48,15 @@ class ControladorReceita:
 
         nova_receita = Receita(dados_receita["titulo"], ingredientes_receita, dados_receita["preparo"])
 
-        if nova_receita in self.__lista_receitas:
+        if nova_receita in self.__dao.get_all():
             self.__tela_receitas.erro_ja_cadastrado(nova_receita.titulo)
             self.abre_tela()
-        self.__lista_receitas.append(nova_receita)
-        self.lista_nome_receitas.append(nova_receita.titulo)
-
+        self.__dao.add(nova_receita.titulo, nova_receita)
         self.registra_evento("Cadastro de receita", nova_receita.titulo)
 
     def alterar_receita(self, titulo):
-        ingredientes_estoque = self.lista_ingredientes_estoque()
-        receita_alterada = self.pega_receita(titulo)
-        self.lista_nome_receitas.remove(receita_alterada.titulo)
+        ingredientes_estoque = self.__controlador_ingrediente.get_all_names()
+        receita_alterada = self.__dao.get(titulo)
 
         infos_tela = {'titulo': receita_alterada.titulo,
                       'preparo': receita_alterada.preparo,
@@ -67,15 +64,16 @@ class ControladorReceita:
 
         dados_receita = self.__tela_receitas_acoes.abre_tela(ingredientes_estoque, infos_tela)
 
+        self.__dao.remove(receita_alterada.titulo)
         receita_alterada.titulo = dados_receita["titulo"]
         receita_alterada.ingredientes_receita = self.criar_lista_ingredientes(dados_receita["ingredientes_receita"])
         receita_alterada.preparo = dados_receita["preparo"]
-        self.lista_nome_receitas.append(receita_alterada.titulo)
+        self.__dao.add(receita_alterada.titulo, receita_alterada)
 
         self.registra_evento("Alteração de receita", receita_alterada.titulo)
 
     def visualizar_receita(self, titulo):
-        receita = self.pega_receita(titulo)
+        receita = self.__dao.get(titulo)
         ingredientes = ''
         for i in receita.ingredientes_receita:
             ingredientes += str(i.nome) + ' - ' + str(i.quantidade) + ' ' + str(i.unidade_medida) + '\n'
@@ -92,16 +90,18 @@ class ControladorReceita:
             self.fazer_receita(titulo)
 
     def fazer_receita(self, titulo):
-        receita = self.pega_receita(titulo)
+        receita = self.__dao.get(titulo)
 
         for i in receita.ingredientes_receita:
-            ingrediente_estoque = self.__controlador_ingrediente.pega_ingrediente(i.nome)
+            ingrediente_estoque = self.__controlador_ingrediente.get(i.nome)
             if ingrediente_estoque.quantidade < i.quantidade:
-                self.__tela_receita_view.erro_ingredientes_insuficientes(ingrediente_estoque.nome)
+                self.__tela_receita_view.erro_ingredientes_insuficientes(i.nome)
                 self.abre_tela()
-        for ingredientes_utilizados in receita.ingredientes_receita:
-            ingrediente_deduzir = self.__controlador_ingrediente.pega_ingrediente(ingredientes_utilizados.nome)
-            ingrediente_deduzir.quantidade -= ingredientes_utilizados.quantidade
+
+        for i in receita.ingredientes_receita:
+            ingrediente_deduzir = self.__controlador_ingrediente.get(i.nome)
+            ingrediente_deduzir.quantidade -= i.quantidade
+            self.__controlador_ingrediente.add(ingrediente_deduzir.nome, ingrediente_deduzir)
         self.__tela_receitas.feedback_sucesso()
 
         self.registra_evento("Receita feita", titulo)
@@ -116,26 +116,12 @@ class ControladorReceita:
             self.__tela_receita_relatorio.abre_tela(relatorio)
 
     def excluir_receita(self, titulo):
-        receita_deletada = self.pega_receita(titulo)
-        self.lista_nome_receitas.remove(receita_deletada.titulo)
-        self.__lista_receitas.remove(receita_deletada)
-
-        del receita_deletada
+        self.__dao.remove(titulo)
         self.__tela_receitas_acoes.feedback_sucesso()
 
         self.registra_evento("Exclusão de receita", titulo)
 
     # ------ MÉTODOS INTERNOS ------
-
-    def pega_receita(self, nome: str):
-        try:
-            for receita in self.__lista_receitas:
-                if receita.titulo.lower() == nome.lower():
-                    return receita
-            raise ValueError
-        except ValueError:
-            self.__tela_receitas.erro_nao_cadastrado(nome)
-            self.abre_tela()
 
     def registra_evento(self, acao, receita):
         registro = ''
@@ -145,14 +131,10 @@ class ControladorReceita:
     def criar_lista_ingredientes(self, dados_ingredientes: dict):
         ingredientes_receita = []
         for nome_ingrediente in dados_ingredientes:
-            add_ingrediente = IngredienteReceita(self.__controlador_ingrediente.pega_ingrediente(nome_ingrediente),
+            add_ingrediente = IngredienteReceita(self.__controlador_ingrediente.get(nome_ingrediente),
                                                  dados_ingredientes[nome_ingrediente])
             ingredientes_receita.append(add_ingrediente)
         return ingredientes_receita
-
-    def lista_ingredientes_estoque(self):
-        lista_ingredientes_estoque = self.__controlador_ingrediente.listagem_nome_ingredientes
-        return lista_ingredientes_estoque
 
     def retornar_menu_principal(self):
         self.__controlador_sistema.abre_tela()
