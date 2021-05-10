@@ -11,7 +11,7 @@ class TelaIngredienteAcoes(AbstractTela):
     def init_components(self, infos_tela):
         if not infos_tela:
             layout = [[sg.Text('Novo Ingrediente')],
-                      [sg.Text('Nome:'), sg.InputText('Ingrediente',key='nome')],
+                      [sg.Text('Nome:'), sg.InputText(key='nome')],
                       [sg.Text('Unidade de Medida:')],
                       [sg.Radio('Unidades', 'RADIO1', default=True, key='unidades'),
                        sg.Radio('Kg', 'RADIO1', key='kg'),
@@ -80,11 +80,8 @@ class TelaIngredienteAcoes(AbstractTela):
 
     def erro_cadastro(self):
         sg.Popup("Erro de Cadastro", "Atenção! Os valores de nome e quantidade não devem ser vazios e "
-                                     "o valor de quantidade deve ser >= 0. Tente novamente.")
+                                     "o valor de quantidade deve ser >= 0. Tente novamente.", location=(500,300))
 
     def erro_ja_cadastrado(self, nome):
-        sg.Popup("Item Já Cadastrado", "Não é possível completar a operação -  o ingrediente {} já foi cadastrado.".format(nome))
-
-    def erro_nao_cadastrado(self, nome):
-        sg.Popup("Item Não Cadastrado", "O ingrediente {} não foi encontrado. Por favor cadastrar ou selecionar o ingrediente.".format(nome))
-
+        sg.Popup("Item Já Cadastrado", "Não é possível completar a operação -  "
+                                       "o ingrediente {} já foi cadastrado.".format(nome), location=(500,300))

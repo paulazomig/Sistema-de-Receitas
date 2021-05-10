@@ -31,6 +31,3 @@ class TelaIngrediente(AbstractTela):
 
     def erro_ja_cadastrado(self, nome):
         pass
-
-    def erro_nao_cadastrado(self, nome):
-        pass

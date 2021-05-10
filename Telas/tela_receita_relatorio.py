@@ -6,7 +6,6 @@ class TelaReceitaRelatorio(AbstractTela):
 
     def __init__(self):
         self.__window = None
-        #self.init_components(None)
 
     def init_components(self, relatorio):
         layout = [[sg.Text('LOG DE RECEITAS')],
@@ -23,8 +22,7 @@ class TelaReceitaRelatorio(AbstractTela):
         self.__window.Close()
         return
 
-    def erro_ja_cadastrado(self, nome):
-        pass
+    # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
 
-    def erro_nao_cadastrado(self, nome):
+    def erro_ja_cadastrado(self, nome):
         pass

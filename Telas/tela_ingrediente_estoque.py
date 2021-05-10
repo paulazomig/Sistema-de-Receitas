@@ -12,7 +12,7 @@ class TelaIngredienteEstoque(AbstractTela):
         layout = [[sg.Text(infos_estoque)],
                   [sg.Button('Retornar ao Menu de Ingredientes')]]
 
-        self.__window = sg.Window('Estoque de Ingredientes', location=(500,300), size=(400, 300)).Layout(layout)
+        self.__window = sg.Window('Estoque de Ingredientes', location=(500,300), size=(400, 300), resizable=True).Layout(layout)
 
     def abre_tela(self, infos_estoque):
         self.init_components(infos_estoque)
@@ -22,8 +22,7 @@ class TelaIngredienteEstoque(AbstractTela):
 
         self.__window.Close()
 
-    def erro_ja_cadastrado(self, nome):
-        pass
+    # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
 
-    def erro_nao_cadastrado(self, nome):
+    def erro_ja_cadastrado(self, nome):
         pass

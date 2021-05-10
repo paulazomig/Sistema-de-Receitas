@@ -23,8 +23,7 @@ class TelaSistema(AbstractTela):
     def fecha_tela(self):
         self.__window.Close()
 
-    def erro_ja_cadastrado(self, nome):
-        pass
+    # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
 
-    def erro_nao_cadastrado(self, nome):
+    def erro_ja_cadastrado(self, nome):
         pass

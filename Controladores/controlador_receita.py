@@ -5,6 +5,8 @@ from Telas.tela_receita_view import TelaReceitaView
 from Telas.tela_receita_relatorio import TelaReceitaRelatorio
 from Entidades.ingrediente_receita import IngredienteReceita
 from DAOs.receita_dao import ReceitaDAO
+from DAOs.relatorio_dao import RelatorioDAO
+from Excecoes.empty_list_exception import EmptyListException
 from datetime import date
 
 
@@ -13,6 +15,7 @@ class ControladorReceita:
         self.__controlador_sistema = controlador_sistema
         self.__controlador_ingrediente = self.__controlador_sistema.dao_ingrediente
         self.__dao = ReceitaDAO()
+        self.__dao_relatorio = RelatorioDAO()
         self.__tela_receitas = TelaReceita()
         self.__tela_receitas_acoes = TelaReceitaAcoes()
         self.__tela_receita_view = TelaReceitaView()
@@ -39,7 +42,7 @@ class ControladorReceita:
                 lista_opcoes[opcao_menu]()
 
     def cadastrar_receita(self):
-        ingredientes_estoque = self.__controlador_ingrediente.get_all_names()
+        ingredientes_estoque = self.lista_ingredientes_menu()
         infos_tela = None
         button, dados_receita = self.__tela_receitas_acoes.abre_tela(ingredientes_estoque, infos_tela)
 
@@ -60,7 +63,7 @@ class ControladorReceita:
         self.registra_evento("Cadastro de receita", nova_receita.titulo)
 
     def alterar_receita(self, titulo):
-        ingredientes_estoque = self.__controlador_ingrediente.get_all_names()
+        ingredientes_estoque = self.lista_ingredientes_menu()
         receita_alterada = self.__dao.get(titulo)
 
         if receita_alterada is None:
@@ -126,13 +129,17 @@ class ControladorReceita:
         self.registra_evento("Receita feita", titulo)
 
     def ver_relatorio_receita(self):
-        if not self.__eventos_receita:
-            self.__tela_receita_relatorio.erro_lista_vazia()
-        else:
+        try:
+            if not self.__dao_relatorio.get():
+                raise EmptyListException()
+
             relatorio = ''
-            for i in self.__eventos_receita:
+            for i in self.__dao_relatorio.get():
                 relatorio += i + '\n'
             self.__tela_receita_relatorio.abre_tela(relatorio)
+
+        except EmptyListException:
+            self.abre_tela()
 
     def excluir_receita(self, titulo):
         valor = self.__dao.remove(titulo)
@@ -146,7 +153,7 @@ class ControladorReceita:
     def registra_evento(self, acao, receita):
         registro = ''
         registro += 'Ação: ' + acao + " - Receita: " + receita + " - Data: " + str(date.today())
-        self.__eventos_receita.append(registro)
+        self.__dao_relatorio.add(registro)
 
     def criar_lista_ingredientes(self, dados_ingredientes: dict):
         ingredientes_receita = []
@@ -155,6 +162,14 @@ class ControladorReceita:
                                                  dados_ingredientes[nome_ingrediente])
             ingredientes_receita.append(add_ingrediente)
         return ingredientes_receita
+
+    def lista_ingredientes_menu(self):
+        lista_ingredientes = self.__controlador_ingrediente.get_all()
+        lista_menu = []
+        for i in lista_ingredientes:
+            ing = i.nome + ', [{}]'.format(i.unidade_medida)
+            lista_menu.append(ing)
+        return lista_menu
 
     def retornar_menu_principal(self):
         self.__controlador_sistema.abre_tela()

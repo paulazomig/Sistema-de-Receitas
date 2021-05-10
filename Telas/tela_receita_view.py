@@ -6,7 +6,6 @@ class TelaReceitaView(AbstractTela):
 
     def __init__(self):
         self.__window = None
-        #self.init_components(None)
 
     def init_components(self, titulo, ingredientes, preparo):
         layout = [[sg.Text('TÍTULO:'), sg.Text(titulo)],
@@ -27,11 +26,11 @@ class TelaReceitaView(AbstractTela):
             exit(0)
         return button
 
+    # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
+
     def erro_ja_cadastrado(self, nome):
         pass
 
-    def erro_nao_cadastrado(self, nome):
-        pass
-
     def erro_ingredientes_insuficientes(self, nome):
-        sg.Popup("O ingrediente {} não possui quantidade suficiente para essa receita!\n".format(nome))
+        sg.Popup("O ingrediente {} não possui quantidade "
+                 "suficiente para essa receita!\n".format(nome), location=(500,300))

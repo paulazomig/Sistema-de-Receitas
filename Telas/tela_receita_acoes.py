@@ -35,7 +35,9 @@ class TelaReceitaAcoes(AbstractTela):
                                 sg.Button('Finalizar Cadastro da Receita', key='finalizar'),
                                 sg.Button('Cancelar', key='cancel')]]
 
-        self.__window = sg.Window('Cadastro de Receita', location=(450, 300), default_element_size=(60, 1)).Layout(layout)
+        self.__window = sg.Window('Cadastro de Receita',
+                                  location=(450, 300),
+                                  default_element_size=(60, 1)).Layout(layout)
 
         self.__window_ingrediente = sg.Window('Cadastro de Ingredientes da Receita',
                                               location=(450, 300),
@@ -72,8 +74,8 @@ class TelaReceitaAcoes(AbstractTela):
                             continue
 
                         if values_tela_ing['cb_opcao'] != '':
-                            nome = values_tela_ing['cb_opcao']
-                            ingredientes_receita[nome] = qtd
+                            nome = values_tela_ing['cb_opcao'].split(',')
+                            ingredientes_receita[nome[0]] = qtd
 
                             if button_tela_ing == 'finalizar':
                                 loop = False
@@ -94,12 +96,10 @@ class TelaReceitaAcoes(AbstractTela):
     # ------ MÉTODOS TRATAMENTO EXCEÇÕES ------
 
     def erro_ja_cadastrado(self, nome):
-        print("Não é possível completar a operação -  a receita {} já foi cadastrada.\n".format(nome))
-
-    def erro_nao_cadastrado(self, nome):
-        print("A receita {} não foi encontrada. Por favor cadastrar a receita.\n".format(nome))
-        return
+        sg.Popup("Item Já Cadastrado",
+                 "Não é possível completar a operação -  a receita {} já foi cadastrada.\n".format(nome), location=(500,300))
 
     def erro_cadastro(self):
-        sg.Popup("Erro de Cadastro", "Atenção! O valor de título da receita, nome do ingrediente e quantidade não devem ser vazios e "
-                                     "o valor de quantidade de ingrediente deve ser um número inteiro >= 0. Tente novamente.")
+        sg.Popup("Erro de Cadastro", "Atenção! O valor de título da receita não deve ser vazio. "
+                                     "O valor de quantidade de ingrediente deve ser um "
+                                     "número inteiro >= 0. Tente novamente.", location=(500,300))
