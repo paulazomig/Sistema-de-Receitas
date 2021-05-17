@@ -72,7 +72,7 @@ class ControladorIngrediente:
             if dados_alteracao is None:
                 self.alterar_ingrediente(nome)
 
-            self.dao.remove(dados_alteracao['nome'])
+            self.dao.remove(ingrediente_alterado.nome)
 
             ingrediente_alterado.nome = dados_alteracao["nome"]
             ingrediente_alterado.unidade_medida = dados_alteracao["unidade_medida"]

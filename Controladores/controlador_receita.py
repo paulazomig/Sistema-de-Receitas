@@ -98,7 +98,8 @@ class ControladorReceita:
 
         ingredientes = ''
         for i in receita.ingredientes_receita:
-            ingredientes += str(i.nome) + ' - ' + str(i.quantidade) + ' ' + str(i.unidade_medida) + '\n'
+            if i.nome != '':
+                ingredientes += str(i.nome) + ' - ' + str(i.quantidade) + ' ' + str(i.unidade_medida) + '\n'
         titulo = receita.titulo
         preparo = receita.preparo
 
@@ -158,10 +159,11 @@ class ControladorReceita:
     def criar_lista_ingredientes(self, dados_ingredientes: dict):
         ingredientes_receita = []
         for nome_ingrediente in dados_ingredientes:
-            add_ingrediente = IngredienteReceita(self.__controlador_ingrediente.get(nome_ingrediente),
-                                                 dados_ingredientes[nome_ingrediente])
-            ingredientes_receita.append(add_ingrediente)
-        return ingredientes_receita
+            if nome_ingrediente != '':
+                add_ingrediente = IngredienteReceita(self.__controlador_ingrediente.get(nome_ingrediente),
+                                                     dados_ingredientes[nome_ingrediente])
+                ingredientes_receita.append(add_ingrediente)
+            return ingredientes_receita
 
     def lista_ingredientes_menu(self):
         lista_ingredientes = self.__controlador_ingrediente.get_all()
