@@ -12,7 +12,7 @@ class TelaReceitaRelatorio(AbstractTela):
                   [sg.Text(relatorio)],
                   [sg.Button('Retornar ao Menu de Receitas', key='retornar')]]
 
-        self.__window = sg.Window('Tela de Relatório', location=(500, 300), resizable=True).Layout(layout)
+        self.__window = sg.Window('Tela de Relatório', location=(500, 150), resizable=True).Layout(layout)
 
     def abre_tela(self, relatorio):
         self.init_components(relatorio)
